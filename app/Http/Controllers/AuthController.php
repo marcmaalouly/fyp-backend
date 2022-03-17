@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class AuthController extends BaseApiController
 {
@@ -28,6 +27,18 @@ class AuthController extends BaseApiController
     public function register(RegisterRequest $request)
     {
         $response = $this->service->register($request);
+        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+    }
+
+    public function logout()
+    {
+        $response = $this->service->logout();
+        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+    }
+
+    public function me()
+    {
+        $response = $this->service->me();
         return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 }
