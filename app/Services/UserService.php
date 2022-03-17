@@ -26,60 +26,36 @@ class UserService
         $user = $this->repository->where(['email' => $validatedData['email']])->first();
 
         if (!$user || !Hash::check($validatedData['password'], $user->password)) {
-            return [
-                'status' => $this->error(),
-                'data' => 'Wrong Email or Password',
-                'code' => 401
-            ];
+            return $this->error('Wrong Email or Password');
         }
 
         $token = $user->createToken($validatedData['email'])->plainTextToken;
-        return [
-            'status' => $this->success(),
-            'data' => [
-                'token_type' => 'bearer',
-                'token' => $token,
-                'user' => $user,
-            ],
-            'message' => 'Logged In'
-        ];
+        return $this->success([
+            'token_type' => 'bearer',
+            'token' => $token,
+            'user' => $user,
+        ], 'Logged In');
     }
 
     public function register(Request $request)
     {
         $validatedData = $this->validate($request);
         $this->repository->create($validatedData);
-        return [
-            'status' => $this->success(),
-            'data' => [],
-            'message' => 'Registered Successfully'
-        ];
+        return $this->success([], 'Registered Successfully');
     }
 
     public function logout()
     {
         auth()->user()->currentAccessToken()->delete();
-        return [
-            'status' => $this->success(),
-            'data' => [],
-            'message' => 'Logged Out Successfully'
-        ];
+        return $this->success([], 'Logged Out Successfully');
     }
 
     public function me()
     {
         if (auth()->check()) {
-            return [
-                'status' => $this->success(),
-                'data' => [],
-                'message' => 'Valid Token'
-            ];
+            return $this->success([], 'Valid Token');
         }
 
-        return [
-            'status' => $this->error(),
-            'data' => 'No Longer Authenticated',
-            'code' => 401
-        ];
+        return $this->error('No Longer Authenticated');
     }
 }

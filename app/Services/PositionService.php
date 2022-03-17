@@ -22,11 +22,8 @@ class PositionService
 
     public function get()
     {
-        return [
-            'status' => $this->success(),
-            'data' => $this->repository->where(['user_id' => auth()->user()->id])->get(['id', 'name']),
-            'message' => 'Fetched'
-        ];
+        $positions = $this->repository->where(['user_id' => auth()->user()->id])->get(['id', 'name']);
+        return $this->success($positions, 'Fetched');
     }
 
     public function store(Request $request)
@@ -35,11 +32,7 @@ class PositionService
         $validatedData['user_id'] = auth()->user()->id;
         $this->repository->create($validatedData);
 
-        return [
-            'status' => $this->success(),
-            'data' => [],
-            'message' => 'Position Successfully Created'
-        ];
+        return $this->success([], 'Position Successfully Created');
     }
 
     public function update(Request $request, Position $position)
@@ -47,21 +40,13 @@ class PositionService
         $validatedData = $this->validate($request);
         $this->repository->update($validatedData, $position);
 
-        return [
-            'status' => $this->success(),
-            'data' => [],
-            'message' => 'Position Successfully Updated'
-        ];
+        return $this->success([], 'Position Successfully Updated');
     }
 
     public function delete(Position $position)
     {
         $this->repository->delete($position);
 
-        return [
-            'status' => $this->success(),
-            'data' => [],
-            'message' => 'Position Successfully Deleted'
-        ];
+        return $this->success([], 'Position Successfully Deleted');
     }
 }

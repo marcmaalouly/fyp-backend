@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PositionController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +13,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('', [PositionController::class, 'store']);
         Route::put('{position}', [PositionController::class, 'update']);
         Route::delete('{position}', [PositionController::class, 'destroy']);
+
+        Route::group(['prefix' => '{position}/', 'middleware' => 'user_owner_position'], function () {
+            Route::get('languages', [LanguageController::class, 'index']);
+            Route::group(['prefix' => 'language/'], function () {
+                Route::post('', [LanguageController::class, 'store']);
+                Route::delete('{language}', [LanguageController::class, 'destroy'])->middleware('language_belongs_to_position');
+            });
+        });
     });
 });
 

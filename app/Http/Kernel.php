@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\LanguageBelongsToPosition;
+use App\Http\Middleware\UserCreatedPosition;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,5 +65,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'user_owner_position' => UserCreatedPosition::class,
+        'language_belongs_to_position' => LanguageBelongsToPosition::class,
     ];
 }

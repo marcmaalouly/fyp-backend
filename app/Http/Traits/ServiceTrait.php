@@ -6,14 +6,22 @@ use Illuminate\Http\Request;
 
 trait ServiceTrait
 {
-    public function error()
+    public function error($data = [], $code = 401)
     {
-        return 'sendError';
+        return [
+            'status' => 'sendError',
+            'data' => $data,
+            'code' => $code
+        ];
     }
 
-    public function success()
+    public function success($data = [], $message = '')
     {
-        return 'sendResponse';
+        return [
+            'status' => 'sendResponse',
+            'data' => $data,
+            'message' => $message
+        ];
     }
 
     public function validate(Request $request)
