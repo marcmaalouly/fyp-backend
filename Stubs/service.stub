@@ -6,14 +6,14 @@ use App\Repositories\$MODEL$Repository;
 
 class $MODEL$Service
 {
-    protected $service;
+    protected $repository;
 
     /**
-     * @param $MODEL$Repository $service
+     * @param $MODEL$Repository $repository
      */
-    public function __construct($MODEL$Repository $service)
+    public function __construct($MODEL$Repository $repository)
     {
-        $this->service = $service;
+        $this->repository = $repository;
     }
 
 }

@@ -20,7 +20,7 @@ class CreateCandidatesTable extends Migration
             $table->longText('mail_content');
             $table->string('year_of_experience')->default(0);
 
-            $table->unsignedBigInteger('language_id');
+            $table->unsignedBigInteger('language_id')->nullable();
             $table->foreign('language_id')
                 ->references('id')
                 ->on('languages')
