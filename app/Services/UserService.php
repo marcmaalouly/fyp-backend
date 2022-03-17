@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Http\Traits\ApiResponseTrait;
+use App\Http\Traits\ServiceTrait;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    use ApiResponseTrait;
+    use ServiceTrait;
     protected $repository;
 
     /**
@@ -22,7 +22,7 @@ class UserService
 
     public function login(Request $request)
     {
-        $validatedData = $this->validatedRequest($request);
+        $validatedData = $this->validate($request);
         $user = $this->repository->where(['email' => $validatedData['email']])->first();
 
         if (!$user || !Hash::check($validatedData['password'], $user->password)) {
@@ -47,7 +47,7 @@ class UserService
 
     public function register(Request $request)
     {
-        $validatedData = $this->validatedRequest($request);
+        $validatedData = $this->validate($request);
         $this->repository->create($validatedData);
         return [
             'status' => $this->success(),
@@ -81,9 +81,5 @@ class UserService
             'data' => 'No Longer Authenticated',
             'code' => 401
         ];
-    }
-    private function validatedRequest(Request $request)
-    {
-        return $request->validated();
     }
 }

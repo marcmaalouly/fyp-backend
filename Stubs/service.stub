@@ -3,11 +3,11 @@
 namespace $NAMESPACE$;
 
 use App\Repositories\$MODEL$Repository;
-use App\Http\Traits\ApiResponseTrait;
+use App\Http\Traits\ServiceTrait;
 
 class $MODEL$Service
 {
-    use ApiResponseTrait;
+    use ServiceTrait;
     protected $repository;
 
     /**
