@@ -1,0 +1,19 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use App\Repositories\$MODEL$Repository;
+
+class $MODEL$Service
+{
+    protected $service;
+
+    /**
+     * @param $MODEL$Repository $service
+     */
+    public function __construct($MODEL$Repository $service)
+    {
+        $this->service = $service;
+    }
+
+}
