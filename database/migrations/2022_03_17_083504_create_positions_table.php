@@ -16,6 +16,7 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->enum('mail_service', ['outlook', 'gmail', 'smtp']);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')

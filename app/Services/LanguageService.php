@@ -31,6 +31,11 @@ class LanguageService
     {
         $validatedData = $this->validate($request);
         $validatedData['position_id'] = $position->id;
+
+        if (!isset($validatedData['mail_service'])) {
+            $validatedData['mail_service'] = $position->mail_service;
+        }
+
         $this->repository->create($validatedData);
 
         return $this->success([], 'Language Successfully Created');

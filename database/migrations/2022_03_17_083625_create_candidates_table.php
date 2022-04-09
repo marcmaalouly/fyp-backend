@@ -15,9 +15,10 @@ class CreateCandidatesTable extends Migration
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
+            $table->string('full_name')->nullable();
             $table->string('email');
-            $table->longText('mail_content');
+            $table->longText('mail_content_raw')->nullable();
+            $table->longText('mail_content_html')->nullable();
             $table->string('year_of_experience')->default(0);
 
             $table->unsignedBigInteger('language_id')->nullable();

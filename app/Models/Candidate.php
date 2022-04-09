@@ -37,7 +37,8 @@ class Candidate extends Model
     protected $fillable = [
         'full_name',
         'email',
-        'mail_content',
+        'mail_content_raw',
+        'mail_content_html',
         'year_of_experience',
         'language_id'
     ];

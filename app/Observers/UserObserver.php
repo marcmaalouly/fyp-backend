@@ -16,7 +16,7 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $otp = Str::random(6);
+        $otp = rand(100000, 999999);
         $user->update(['otp' => $otp]);
 
         try {

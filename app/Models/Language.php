@@ -34,7 +34,8 @@ class Language extends Model
 
     protected $fillable = [
         'name',
-        'position_id'
+        'position_id',
+        'mail_service'
     ];
 
     public function position()
