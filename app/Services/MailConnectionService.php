@@ -39,6 +39,12 @@ class MailConnectionService
     public function fetch(Position $position, Language $language)
     {
         $folder = $language->folder ?? ($position->folder ?? null);
-        $this->repository->fetch($folder);
+        $this->repository->fetch($language, $folder);
+    }
+
+    public function fetchByEmail(Position $position, Language $language, Request $request)
+    {
+        $validatedData = $this->validate($request);
+        $this->repository->fetchByEmail($validatedData['email'], $position, $language);
     }
 }

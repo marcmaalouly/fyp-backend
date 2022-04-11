@@ -19,7 +19,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::get('languages', [LanguageController::class, 'index']);
             Route::group(['prefix' => 'language/'], function () {
                 Route::post('{language}/connect', [MailConnectionController::class, 'connect']);
-                Route::get('{language}/mails', [MailConnectionController::class, 'fetch']);
+                Route::post('{language}/mails', [MailConnectionController::class, 'fetch']);
+                Route::post('{language}/mails/email', [MailConnectionController::class, 'fetchByEmail']);
                 Route::post('', [LanguageController::class, 'store']);
                 Route::delete('{language}', [LanguageController::class, 'destroy'])->middleware('language_belongs_to_position');
             });
@@ -29,3 +30,4 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('check-email', [AuthController::class, 'checkEmail']);

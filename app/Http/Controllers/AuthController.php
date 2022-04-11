@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CheckEmailRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Services\UserService;
@@ -28,6 +29,11 @@ class AuthController extends BaseApiController
     {
         $response = $this->service->register($request);
         return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+    }
+
+    public function checkEmail(CheckEmailRequest $request)
+    {
+        $request->validated();
     }
 
     public function logout()

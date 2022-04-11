@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FetchByEmailRequest;
 use App\Http\Requests\MailConnectionRequest;
 use App\Models\Language;
 use App\Models\Position;
@@ -29,5 +30,10 @@ class MailConnectionController extends Controller
     public function fetch(Position $position, Language $language)
     {
         $this->service->fetch($position, $language);
+    }
+
+    public function fetchByEmail(FetchByEmailRequest $request, Position $position, Language $language)
+    {
+        $this->service->fetchByEmail($position, $language, $request);
     }
 }
