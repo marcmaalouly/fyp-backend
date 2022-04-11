@@ -9,7 +9,7 @@ use App\MenuBuilder\RenderFromDatabaseData;
 class GetSidebarMenu
 {
 
-    public function getMenuFromDB($menuName, $role)
+    public function getMenuFromDB($menuName)
     {
         $menutab = Menus::join('menu_role', 'menus.id', '=', 'menu_role.menus_id')
             ->join('menulist', 'menulist.id', '=', 'menus.menu_id')

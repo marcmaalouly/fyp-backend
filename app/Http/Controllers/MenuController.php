@@ -37,12 +37,6 @@ class MenuController extends Controller
      */
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $roles = $user->workspaceRoles()->first();
-//        if ($roles->name == 'User')
-//        {
-//            $roles = $user->projectRoles();
-//        }
 
         if ($request->has('menu')) {
             $menuName = $request->input('menu');
@@ -51,6 +45,6 @@ class MenuController extends Controller
         }
 
         $menus = new GetSidebarMenu();
-        return response()->json($menus->getMenuFromDB($menuName, $roles->id));
+        return response()->json($menus->getMenuFromDB($menuName));
     }
 }

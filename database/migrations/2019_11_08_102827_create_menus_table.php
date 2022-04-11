@@ -23,6 +23,11 @@ class CreateMenusTable extends Migration
             $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('menu_id')->unsigned();
             $table->integer('sequence');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('set null');
         });
     }
 
