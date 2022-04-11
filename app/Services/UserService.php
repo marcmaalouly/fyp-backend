@@ -54,7 +54,10 @@ class UserService
             return $this->error("No OTP found");
         }
 
-        return $this->success([], 'Registered Successfully');
+        return $this->success([
+            'token' => $user->createToken($user->email)->plainTextToken,
+            'user' => $user
+        ], 'Verified Successfully');
     }
 
     public function logout()
