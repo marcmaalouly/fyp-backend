@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('me', [AuthController::class, 'me']);
 
     Route::get('positions', [PositionController::class, 'index']);
     Route::group(['prefix' => 'position/'], function () {
