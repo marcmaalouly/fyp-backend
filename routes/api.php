@@ -31,3 +31,4 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('check-email', [AuthController::class, 'checkEmail']);
+Route::post('verify-email', [AuthController::class, 'verifyEmail']);

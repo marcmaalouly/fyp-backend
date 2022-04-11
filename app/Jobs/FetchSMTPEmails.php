@@ -34,6 +34,47 @@ class FetchSMTPEmails implements ShouldQueue
     }
 
     /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        try {
+            ClientManager::$config=config('imap');
+            $oFolder = $this->oClient->getFolder($this->folder);
+
+            switch ($this->parameters['method']) {
+                case 'fetchBySubject':
+                    $messages = $oFolder->query()->subject($this->parameters['content'])->get();
+                    break;
+                case 'fetchByDate':
+                    $messages = $oFolder->query()->on($this->parameters['content'])->get();
+                    break;
+                case 'fetchByEmail':
+                    $messages = $oFolder->query()->from($this->parameters['content'])->get();
+                    break;
+                default:
+                    $messages = $oFolder->query()->unseen()->get();
+                    break;
+            }
+
+            foreach ($messages as $message)
+            {
+                $candidate = $this->createCandidate($message);
+
+                if ($message->hasAttachments())
+                {
+                    $this->getAndStoreAttachments($message, $candidate);
+                }
+            }
+
+        } catch (\Exception $exception) {
+            Log::error($exception);
+        }
+    }
+
+    /**
      * Create the candidate with all his info after retrieving the email
      *
      * @param Message $message
@@ -88,46 +129,6 @@ class FetchSMTPEmails implements ShouldQueue
                 'candidate_id' => $candidate->id,
                 'path' => 'storage/attachments/' . $file
             ]);
-        }
-    }
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        try {
-            ClientManager::$config=config('imap');
-            $oFolder = $this->oClient->getFolder($this->folder);
-
-            switch ($this->parameters['method']) {
-                case 'fetchBySubject':
-                    $messages = $oFolder->query()->subject($this->parameters['content'])->get();
-                    break;
-                case 'fetchByDate':
-                    $messages = $oFolder->query()->on($this->parameters['content'])->get();
-                    break;
-                case 'fetchByEmail':
-                    $messages = $oFolder->query()->from($this->parameters['content'])->get();
-                    break;
-                default:
-                    $messages = $oFolder->query()->unseen()->get();
-                    break;
-            }
-
-            foreach ($messages as $message)
-            {
-                $candidate = $this->createCandidate($message);
-
-                if ($message->hasAttachments())
-                {
-                    $this->getAndStoreAttachments($message, $candidate);
-                }
-            }
-
-        } catch (\Exception $exception) {
-            Log::error($exception);
         }
     }
 }

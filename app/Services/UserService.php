@@ -44,6 +44,19 @@ class UserService
         return $this->success([], 'Registered Successfully');
     }
 
+    public function verifyEmail(Request $request)
+    {
+        $validatedData = $this->validate($request);
+
+        $user = $this->repository->where(['email' => $validatedData['email'], 'otp' => $validatedData['otp']])->first();
+
+        if (!$user) {
+            return $this->error("No OTP found");
+        }
+
+        return $this->success([], 'Registered Successfully');
+    }
+
     public function logout()
     {
         auth()->user()->currentAccessToken()->delete();

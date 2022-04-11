@@ -16,7 +16,10 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $otp = rand(100000, 999999);
+        do {
+            $otp = rand(100000, 999999);
+        } while (User::where('otp', $otp)->first());
+
         $user->update(['otp' => $otp]);
 
         try {
