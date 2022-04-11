@@ -29,6 +29,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereYearOfExperience($value)
  * @mixin \Eloquent
+ * @property string|null $mail_content_raw
+ * @property string|null $mail_content_html
+ * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereMailContentHtml($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereMailContentRaw($value)
  */
 class Candidate extends Model
 {

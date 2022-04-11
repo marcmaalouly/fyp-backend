@@ -28,6 +28,6 @@ class MailConnectionController extends Controller
 
     public function fetch(Position $position, Language $language)
     {
-        $this->service->fetch();
+        $this->service->fetch($position, $language);
     }
 }

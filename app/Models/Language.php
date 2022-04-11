@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property int $position_id
+ * @property int $folder
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $candidates
@@ -27,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Language wherePositionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Language whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $mail_service
+ * @method static \Illuminate\Database\Eloquent\Builder|Language whereMailService($value)
  */
 class Language extends Model
 {
@@ -35,7 +38,8 @@ class Language extends Model
     protected $fillable = [
         'name',
         'position_id',
-        'mail_service'
+        'mail_service',
+        'folder'
     ];
 
     public function position()

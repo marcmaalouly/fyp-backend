@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Contracts\MailServerInterface;
 use App\Http\Traits\ServiceTrait;
+use App\Models\Language;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 
 class MailConnectionService
 {
@@ -35,8 +36,9 @@ class MailConnectionService
         Cache::put('client_' . auth()->user()->email, $client);
     }
 
-    public function fetch()
+    public function fetch(Position $position, Language $language)
     {
-        $this->repository->fetch();
+        $folder = $language->folder ?? ($position->folder ?? null);
+        $this->repository->fetch($folder);
     }
 }

@@ -18,6 +18,7 @@ class CreateLanguagesTable extends Migration
             $table->string('name');
 
             $table->enum('mail_service', ['outlook', 'gmail', 'smtp'])->nullable();
+            $table->string('folder')->nullable();
             $table->unsignedBigInteger('position_id');
             $table->foreign('position_id')
                 ->references('id')

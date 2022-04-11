@@ -17,6 +17,7 @@ class CreatePositionsTable extends Migration
             $table->id();
             $table->string('name');
             $table->enum('mail_service', ['outlook', 'gmail', 'smtp']);
+            $table->string('folder')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')

@@ -10,7 +10,7 @@ abstract class MailProviderRepository implements MailServerInterface
 {
     abstract public function connect(string $username = null, string $password = null);
 
-    public function fetch()
+    public function fetch($folder = null)
     {
         $client = Cache::get('client_' . auth()->user()->email);
 
@@ -18,7 +18,7 @@ abstract class MailProviderRepository implements MailServerInterface
             $client = $client->connect();
         }
 
-        $job = new FetchSMTPEmails($client);
+        $job = new FetchSMTPEmails($client, $folder);
         dispatch($job);
     }
 
