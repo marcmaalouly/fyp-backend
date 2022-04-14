@@ -16,6 +16,7 @@ class CreateSkillKeysTable extends Migration
         Schema::create('skill_keys', function (Blueprint $table) {
             $table->id();
             $table->string('key');
+            $table->index('key');
             $table->timestamps();
         });
     }

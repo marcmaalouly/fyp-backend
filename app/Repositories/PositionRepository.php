@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Position;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class PositionRepository
 {
@@ -17,9 +18,15 @@ class PositionRepository
         $this->model = $model;
     }
 
-    public function where(array $where): Builder
+    public function where(array $where): PositionRepository
     {
-        return $this->model::where($where);
+        $this->model = $this->model::where($where);
+        return $this;
+    }
+
+    public function get(array $columns = null): Collection
+    {
+        return $this->model->get($columns);
     }
 
     public function create(array $attributes): Position

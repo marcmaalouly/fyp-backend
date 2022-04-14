@@ -5,6 +5,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MailConnectionController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\SkillKeyController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -12,6 +13,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('me', [AuthController::class, 'me']);
 
     Route::get('menu', [MenuController::class, 'index']);
+
+    Route::get('skills', [SkillKeyController::class, 'index']);
 
     Route::get('positions', [PositionController::class, 'index']);
     Route::group(['prefix' => 'position/'], function () {

@@ -17,9 +17,15 @@ class UserRepository
         $this->model = $model;
     }
 
-    public function where(array $where): Builder
+    public function where($column, $attribute): UserRepository
     {
-        return $this->model::where($where);
+        $this->model = $this->model::where($column, $attribute);
+        return $this;
+    }
+
+    public function first(): User
+    {
+        return $this->model->first();
     }
 
     public function create(array $data): User
