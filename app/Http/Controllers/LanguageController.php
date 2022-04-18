@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLanguageRequest;
+use App\Http\Requests\StoreLanguageSkillsRequest;
 use App\Models\Language;
 use App\Models\Position;
 use App\Services\LanguageService;
@@ -33,16 +34,6 @@ class LanguageController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param StoreLanguageRequest $request
@@ -55,38 +46,10 @@ class LanguageController extends BaseApiController
         return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
+    public function storeSkills(StoreLanguageSkillsRequest $request, Position $position, Language $language)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $response = $this->service->attachSkills($request, $language);
+        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 
     /**
