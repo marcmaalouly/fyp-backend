@@ -24,7 +24,7 @@ class StoreLanguageSkillsRequest extends FormRequest
     public function rules()
     {
         return [
-            'skills.*' => 'required|exists:skill_keys,id'
+            'skills.*.id' => 'required|exists:skill_keys,id'
         ];
     }
 }

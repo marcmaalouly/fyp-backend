@@ -44,7 +44,7 @@ class LanguageService
         $validatedData = $this->validate($request);
         foreach ($validatedData['skills'] as $skill)
         {
-            $language->skill_keys()->attach($skill);
+            $language->skill_keys()->attach($skill['id']);
         }
         return $this->success([], 'Skills Successfully attached');
     }
