@@ -49,6 +49,13 @@ class LanguageService
         return $this->success([], 'Skills Successfully attached');
     }
 
+    public function update(Request $request, Language $language)
+    {
+        $validatedData = $this->validate($request);
+        $language->update($validatedData);
+        return $this->success([], 'Language Successfully Updated');
+    }
+
     public function delete(Language $language)
     {
         $this->repository->delete($language);

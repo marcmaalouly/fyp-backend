@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                 Route::post('', [LanguageController::class, 'store']);
 
                 Route::group(['prefix' => '{language}/', 'middleware' => 'language_belongs_to_position'], function () {
+                    Route::put('update', [LanguageController::class, 'update']);
                     Route::post('connect', [MailConnectionController::class, 'connect']);
                     Route::post('mails', [MailConnectionController::class, 'fetch']);
                     Route::post('mails/email', [MailConnectionController::class, 'fetchByEmail']);

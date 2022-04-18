@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLanguageRequest;
 use App\Http\Requests\StoreLanguageSkillsRequest;
+use App\Http\Requests\UpdateLanguageRequest;
 use App\Models\Language;
 use App\Models\Position;
 use App\Services\LanguageService;
+use Google\Service\ShoppingContent\Resource\Pos;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -46,9 +48,27 @@ class LanguageController extends BaseApiController
         return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 
+    /**
+     * @param StoreLanguageSkillsRequest $request
+     * @param Position $position
+     * @param Language $language
+     * @return mixed
+     */
     public function storeSkills(StoreLanguageSkillsRequest $request, Position $position, Language $language)
     {
         $response = $this->service->attachSkills($request, $language);
+        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+    }
+
+    /**
+     * @param UpdateLanguageRequest $request
+     * @param Position $position
+     * @param Language $language
+     * @return mixed
+     */
+    public function update(UpdateLanguageRequest $request, Position $position, Language $language)
+    {
+        $response = $this->service->update($request, $language);
         return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 
