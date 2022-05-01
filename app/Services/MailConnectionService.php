@@ -27,8 +27,8 @@ class MailConnectionService
         $validatedData = $this->validate($request);
 
         $client = $this->repository->connect(
-            $validatedData['username'],
-            $validatedData['password'],
+            $validatedData['username'] ?? null,
+            $validatedData['password'] ?? null,
             $validatedData['host'] ?? null,
             $validatedData['port'] ?? null
         );

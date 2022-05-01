@@ -3,11 +3,13 @@
 namespace App\Repositories;
 
 use App\Contracts\MailServerInterface;
+use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 
 class GmailProviderRepository implements MailServerInterface
 {
     public function connect()
     {
+        LaravelGmail::makeToken();
         // TODO: Implement connect() method.
     }
 
