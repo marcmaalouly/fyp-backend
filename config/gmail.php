@@ -36,8 +36,7 @@ return [
 	'state' => null,
 
 	'scopes' => [
-		'readonly',
-		'modify',
+		'all',
 	],
 
 	/*
