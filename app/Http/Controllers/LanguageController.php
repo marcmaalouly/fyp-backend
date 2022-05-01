@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLanguageRequest;
+use App\Http\Requests\StoreLanguageSkillsRequest;
+use App\Http\Requests\UpdateLanguageRequest;
 use App\Models\Language;
 use App\Models\Position;
 use App\Services\LanguageService;
+use Google\Service\ShoppingContent\Resource\Pos;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -33,16 +36,6 @@ class LanguageController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param StoreLanguageRequest $request
@@ -56,37 +49,27 @@ class LanguageController extends BaseApiController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param StoreLanguageSkillsRequest $request
+     * @param Position $position
+     * @param Language $language
+     * @return mixed
      */
-    public function show($id)
+    public function storeSkills(StoreLanguageSkillsRequest $request, Position $position, Language $language)
     {
-        //
+        $response = $this->service->attachSkills($request, $language);
+        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
+     * @param UpdateLanguageRequest $request
+     * @param Position $position
+     * @param Language $language
+     * @return mixed
      */
-    public function edit($id)
+    public function update(UpdateLanguageRequest $request, Position $position, Language $language)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        $response = $this->service->update($request, $language);
+        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
     }
 
     /**

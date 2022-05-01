@@ -30,12 +30,18 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::group(['prefix' => '{position}/', 'middleware' => 'user_owner_position'], function () {
             Route::get('languages', [LanguageController::class, 'index']);
+
             Route::group(['prefix' => 'language/'], function () {
-                Route::post('{language}/connect', [MailConnectionController::class, 'connect']);
-                Route::post('{language}/mails', [MailConnectionController::class, 'fetch']);
-                Route::post('{language}/mails/email', [MailConnectionController::class, 'fetchByEmail']);
                 Route::post('', [LanguageController::class, 'store']);
-                Route::delete('{language}', [LanguageController::class, 'destroy'])->middleware('language_belongs_to_position');
+
+                Route::group(['prefix' => '{language}/', 'middleware' => 'language_belongs_to_position'], function () {
+                    Route::put('update', [LanguageController::class, 'update']);
+                    Route::post('connect', [MailConnectionController::class, 'connect']);
+                    Route::post('mails', [MailConnectionController::class, 'fetch']);
+                    Route::post('mails/email', [MailConnectionController::class, 'fetchByEmail']);
+                    Route::post('skills', [LanguageController::class, 'storeSkills']);
+                    Route::delete('', [LanguageController::class, 'destroy']);
+                });
             });
         });
     });

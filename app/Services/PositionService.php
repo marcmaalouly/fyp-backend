@@ -30,9 +30,8 @@ class PositionService
     {
         $validatedData = $this->validate($request);
         $validatedData['user_id'] = auth()->user()->id;
-        $this->repository->create($validatedData);
 
-        return $this->success([], 'Position Successfully Created');
+        return $this->success($this->repository->create($validatedData), 'Position Successfully Created');
     }
 
     public function update(Request $request, Position $position)

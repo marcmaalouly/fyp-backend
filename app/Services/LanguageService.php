@@ -36,9 +36,24 @@ class LanguageService
             $validatedData['mail_service'] = $position->mail_service;
         }
 
-        $this->repository->create($validatedData);
+        return $this->success($this->repository->create($validatedData), 'Language Successfully Created');
+    }
 
-        return $this->success([], 'Language Successfully Created');
+    public function attachSkills(Request $request, Language $language)
+    {
+        $validatedData = $this->validate($request);
+        foreach ($validatedData['skills'] as $skill)
+        {
+            $language->skill_keys()->attach($skill['id']);
+        }
+        return $this->success([], 'Skills Successfully attached');
+    }
+
+    public function update(Request $request, Language $language)
+    {
+        $validatedData = $this->validate($request);
+        $language->update($validatedData);
+        return $this->success([], 'Language Successfully Updated');
     }
 
     public function delete(Language $language)
