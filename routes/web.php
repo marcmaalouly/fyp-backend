@@ -18,12 +18,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/oauth/gmail', function (){
-    return LaravelGmail::redirect();
-});
-
-Route::get('/oauth/gmail/callback', function (){
-    LaravelGmail::makeToken();
-    return redirect()->to('/');
-});
-

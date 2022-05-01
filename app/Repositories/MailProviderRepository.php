@@ -23,7 +23,7 @@ abstract class MailProviderRepository implements MailServerInterface
         dispatch($job);
     }
 
-    public function fetch(Language $language = null, $folder = null)
+    public function fetch(Language $language, $folder = null)
     {
         $parameters = [
             'method' => __FUNCTION__

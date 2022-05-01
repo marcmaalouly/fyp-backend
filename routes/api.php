@@ -6,9 +6,15 @@ use App\Http\Controllers\MailConnectionController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\SkillKeyController;
+use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    Route::get('/oauth/gmail', function (){
+        return LaravelGmail::redirect();
+    });
+
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
 

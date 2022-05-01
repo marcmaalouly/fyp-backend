@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Contracts\MailServerInterface;
+use App\Jobs\FetchGmailEmails;
+use App\Models\Language;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 
 class GmailProviderRepository implements MailServerInterface
@@ -10,12 +12,12 @@ class GmailProviderRepository implements MailServerInterface
     public function connect()
     {
         LaravelGmail::makeToken();
-        // TODO: Implement connect() method.
     }
 
-    public function fetch()
+    public function fetch(Language $language)
     {
-        // TODO: Implement fetch() method.
+        $job = new FetchGmailEmails($language->id);
+        dispatch($job);
     }
 
     public function fetchBySubject(string $subject)
