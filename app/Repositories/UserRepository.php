@@ -17,13 +17,13 @@ class UserRepository
         $this->model = $model;
     }
 
-    public function where($column, $attribute): UserRepository
+    public function where(array $where): UserRepository
     {
-        $this->model = $this->model::where($column, $attribute);
+        $this->model = $this->model::where($where);
         return $this;
     }
 
-    public function first(): User
+    public function first()
     {
         return $this->model->first();
     }
