@@ -23,6 +23,9 @@ class UserRepository
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function first()
     {
         return $this->model->first();
