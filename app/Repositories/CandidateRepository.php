@@ -20,4 +20,15 @@ class CandidateRepository
     {
         return $this->model::create($attributes);
     }
+
+    public function where($column, $attribute): CandidateRepository
+    {
+        $this->model = $this->model::where($column, $attribute);
+        return $this;
+    }
+
+    public function get()
+    {
+        return $this->model->get();
+    }
 }

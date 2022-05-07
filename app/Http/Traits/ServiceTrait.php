@@ -8,20 +8,24 @@ trait ServiceTrait
 {
     public function error($data = [], $code = 401)
     {
-        return [
-            'status' => 'sendError',
+        $response = [
+            'status' => 'Error',
             'data' => $data,
             'code' => $code
         ];
+
+        return response()->json($response);
     }
 
     public function success($data = [], $message = '')
     {
-        return [
-            'status' => 'sendResponse',
+        $response = [
+            'status' => 'Success',
             'data' => $data,
             'message' => $message
         ];
+
+        return response()->json($response);
     }
 
     public function validate(Request $request)

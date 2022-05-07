@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\SkillKeyService;
+use App\Models\Language;
+use App\Models\Position;
+use App\Services\CandidateService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
-class SkillKeyController extends BaseApiController
+class CandidateController extends Controller
 {
     protected $service;
 
     /**
-     * @param SkillKeyService $service
+     * @param CandidateService $service
      */
-    public function __construct(SkillKeyService $service)
+    public function __construct(CandidateService $service)
     {
         $this->service = $service;
     }
@@ -23,15 +24,15 @@ class SkillKeyController extends BaseApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(Position $position, Language $language)
     {
-        return $this->service->get($request);
+        return $this->service->get($language);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -42,7 +43,7 @@ class SkillKeyController extends BaseApiController
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -53,7 +54,7 @@ class SkillKeyController extends BaseApiController
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -64,7 +65,7 @@ class SkillKeyController extends BaseApiController
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -76,7 +77,7 @@ class SkillKeyController extends BaseApiController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
@@ -87,7 +88,7 @@ class SkillKeyController extends BaseApiController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

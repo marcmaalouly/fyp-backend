@@ -8,7 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\VerifyEmailRequest;
 use App\Services\UserService;
 
-class AuthController extends BaseApiController
+class AuthController extends Controller
 {
     protected $service;
 
@@ -22,14 +22,12 @@ class AuthController extends BaseApiController
 
     public function login(LoginRequest $request)
     {
-        $response = $this->service->login($request);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->login($request);
     }
 
     public function register(RegisterRequest $request)
     {
-        $response = $this->service->register($request);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->register($request);
     }
 
     public function checkEmail(CheckEmailRequest $request)
@@ -39,19 +37,16 @@ class AuthController extends BaseApiController
 
     public function verifyEmail(VerifyEmailRequest $request)
     {
-        $response = $this->service->verifyEmail($request);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->verifyEmail($request);
     }
 
     public function logout()
     {
-        $response = $this->service->logout();
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->logout();
     }
 
     public function me()
     {
-        $response = $this->service->me();
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->me();
     }
 }

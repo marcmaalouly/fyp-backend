@@ -48,7 +48,8 @@ class UserService
     {
         $validatedData = $this->validate($request);
 
-        $user = $this->repository->where(['email' => $validatedData['email'], 'otp' => $validatedData['otp']])->first();
+        $user = $this->repository->where('email', $validatedData['email'])
+            ->where('otp', $validatedData['otp'])->first();
 
         if (!$user) {
             return $this->error("No OTP found");

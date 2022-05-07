@@ -46,12 +46,11 @@ class PositionController extends BaseApiController
      * Store a newly created resource in storage.
      *
      * @param StorePositionRequest $request
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StorePositionRequest $request)
     {
-        $response = $this->service->store($request);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->store($request);
     }
 
     /**
@@ -81,23 +80,21 @@ class PositionController extends BaseApiController
      *
      * @param UpdatePositionRequest $request
      * @param Position $position
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdatePositionRequest $request, Position $position)
     {
-        $response = $this->service->update($request, $position);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->update($request, $position);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Position $position
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Position $position)
     {
-        $response = $this->service->delete($position);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->delete($position);
     }
 }

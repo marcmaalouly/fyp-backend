@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MailConnectionController;
 use App\Http\Controllers\MenuController;
@@ -41,6 +42,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                     Route::post('mails/email', [MailConnectionController::class, 'fetchByEmail']);
                     Route::post('skills', [LanguageController::class, 'storeSkills']);
                     Route::delete('', [LanguageController::class, 'destroy']);
+
+                    Route::get('candidates', [CandidateController::class, 'index']);
                 });
             });
         });

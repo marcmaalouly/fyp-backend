@@ -27,12 +27,11 @@ class LanguageController extends BaseApiController
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Position $position)
     {
-        $response = $this->service->get($position);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->get($position);
     }
 
     /**
@@ -40,12 +39,11 @@ class LanguageController extends BaseApiController
      *
      * @param StoreLanguageRequest $request
      * @param Position $position
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreLanguageRequest $request, Position $position)
     {
-        $response = $this->service->store($request, $position);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->store($request, $position);
     }
 
     /**
@@ -56,8 +54,7 @@ class LanguageController extends BaseApiController
      */
     public function storeSkills(StoreLanguageSkillsRequest $request, Position $position, Language $language)
     {
-        $response = $this->service->attachSkills($request, $language);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->attachSkills($request, $language);
     }
 
     /**
@@ -68,19 +65,17 @@ class LanguageController extends BaseApiController
      */
     public function update(UpdateLanguageRequest $request, Position $position, Language $language)
     {
-        $response = $this->service->update($request, $language);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->update($request, $language);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Position $position, Language $language)
     {
-        $response = $this->service->delete($language);
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->delete($language);
     }
 }
