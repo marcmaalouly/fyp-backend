@@ -23,7 +23,7 @@ class UserService
     public function login(Request $request)
     {
         $validatedData = $this->validate($request);
-        $user = $this->repository->where('email', $validatedData['email'])->first();
+        $user = $this->repository->where(['email' => $validatedData['email']])->first();
 
         if (!$user || !Hash::check($validatedData['password'], $user->password)) {
             return $this->error('Wrong Email or Password');
