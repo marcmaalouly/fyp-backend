@@ -36,6 +36,10 @@ class LanguageService
             $validatedData['mail_service'] = $position->mail_service;
         }
 
+        if ($validatedData['mail_service'] == 'outlook') {
+            $validatedData['folder'] = 'inbox';
+        }
+
         return $this->success($this->repository->create($validatedData), 'Language Successfully Created');
     }
 
