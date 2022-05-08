@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "beyondcode/laravel-websockets": "^1.13",
         "dacastro4/laravel-gmail": "^6.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -13,7 +14,9 @@
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
-        "webklex/laravel-imap": "^2.4"
+        "pusher/pusher-php-server": "~3.0",
+        "webklex/laravel-imap": "^2.4",
+      "ext-curl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
