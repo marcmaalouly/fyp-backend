@@ -21,15 +21,10 @@ class PositionController extends BaseApiController
         $this->service = $service;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
+
     public function index()
     {
-        $response = $this->service->get();
-        return $this->{$response['status']}($response['data'], $response['message'] ?? null, $response['code'] ?? 200);
+        return $this->service->get();
     }
 
     /**
