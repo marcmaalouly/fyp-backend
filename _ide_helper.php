@@ -634,7 +634,7 @@
          * @return string
          * @static
          */
-        public static function getCachedConfigPath()
+        public static functiongetCachedConfigPath()
         {
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->getCachedConfigPath();
