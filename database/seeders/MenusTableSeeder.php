@@ -116,8 +116,8 @@ class MenusTableSeeder extends Seeder
         ]);
         $this->menuId = DB::getPdo()->lastInsertId();  //set menuId
         /* guest menu */
-        $this->insertLink('', 'Dashboard', '/', 'home', 'cil-command');
-        $this->insertLink('', 'Openings', '/openings', 'openings', 'cil-command');
+        $this->insertLink('', 'Dashboard', '/home', 'home', 'cil-chart-pie');
+        $this->insertLink('', 'Openings', '/openings', 'openings', 'cil-folder-open');
         $this->insertLink('', 'Languages', '/languages', 'languages', 'cil-command');
         DB::table('menulist')->insert([
             'name' => 'top_menu'
