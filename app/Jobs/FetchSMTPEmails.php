@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Candidate;
 use App\Models\CandidateAttachment;
+use App\Notifications\EmailFetchedNotification;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -69,7 +71,8 @@ class FetchSMTPEmails implements ShouldQueue
                 }
             }
 
-        } catch (\Exception $exception) {
+            $this->sendNotification();
+        } catch (Exception $exception) {
             Log::error($exception);
         }
     }
@@ -130,5 +133,14 @@ class FetchSMTPEmails implements ShouldQueue
                 'path' => 'storage/attachments/' . $file
             ]);
         }
+    }
+
+    /**
+     * Send a live notification to the user to inform them that their emails were fetched.
+     * @return void
+     */
+    private function sendNotification()
+    {
+        auth()->user()->notify(new EmailFetchedNotification());
     }
 }
