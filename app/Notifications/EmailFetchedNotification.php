@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -31,7 +30,16 @@ class EmailFetchedNotification extends Notification implements ShouldBroadcast
      */
     public function via($notifiable)
     {
-        return ['broadcast'];
+        return ['broadcast', 'mail'];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->subject('Email Fetched')
+            ->greeting('Emails Successfully Fetched')
+            ->line("Dear {$notifiable->full_name} your emails were successfully fetched.")
+            ->line("Please check your opening that you recently created to see the fetched emails.");
     }
 
     public function toBroadcast($notifiable): BroadcastMessage

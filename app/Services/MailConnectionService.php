@@ -38,7 +38,7 @@ class MailConnectionService
 
     public function fetch(Position $position, Language $language)
     {
-        $folder = $language->folder ?? ($position->folder ?? null);
+        $folder = $language->folder ?? ($position->folder ?? 'INBOX');
         $this->repository->fetch($language, $folder);
     }
 

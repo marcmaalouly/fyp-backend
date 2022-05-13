@@ -11,7 +11,7 @@ abstract class MailProviderRepository implements MailServerInterface
 {
     abstract public function connect(string $username = null, string $password = null);
 
-    private function runJob(Language $language, $method, $folder = null)
+    private function runJob(Language $language, $method, $folder = 'INBOX')
     {
         $client = Cache::get('client_' . auth()->user()->email);
 
@@ -19,11 +19,11 @@ abstract class MailProviderRepository implements MailServerInterface
             $client = $client->connect();
         }
 
-        $job = new FetchSMTPEmails($client, $language->id, $method, $folder);
+        $job = new FetchSMTPEmails($client, $language->id, $method, auth()->user(),$folder);
         dispatch($job);
     }
 
-    public function fetch(Language $language, $folder = null)
+    public function fetch(Language $language, $folder = 'INBOX')
     {
         $parameters = [
             'method' => __FUNCTION__
@@ -32,7 +32,7 @@ abstract class MailProviderRepository implements MailServerInterface
         $this->runJob($language, $parameters, $folder);
     }
 
-    public function fetchBySubject(string $subject, Language $language = null, $folder = null)
+    public function fetchBySubject(string $subject, Language $language = null, $folder = 'INBOX')
     {
         $parameters = [
             'method' => __FUNCTION__,
@@ -42,7 +42,7 @@ abstract class MailProviderRepository implements MailServerInterface
         $this->runJob($language, $parameters, $folder);
     }
 
-    public function fetchByDate($date, Language $language = null, $folder = null)
+    public function fetchByDate($date, Language $language = null, $folder = 'INBOX')
     {
         $parameters = [
             'method' => __FUNCTION__,
@@ -52,7 +52,7 @@ abstract class MailProviderRepository implements MailServerInterface
         $this->runJob($language, $parameters, $folder);
     }
 
-    public function fetchByEmail(string $email, Language $language = null, $folder = null)
+    public function fetchByEmail(string $email, Language $language = null, $folder = 'INBOX')
     {
         $parameters = [
             'method' => __FUNCTION__,
