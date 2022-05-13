@@ -4,6 +4,9 @@ namespace App\Jobs;
 
 use App\Models\Candidate;
 use App\Models\CandidateAttachment;
+use App\Models\User;
+use App\Notifications\EmailFetchedNotification;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,17 +23,18 @@ class FetchSMTPEmails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $oClient, $folder, $language_id, $parameters = [];
+    protected $oClient, $folder, $user, $language_id, $parameters = [];
 
     /**
      * @param Client $oClient
      */
-    public function __construct(Client $oClient, $language_id, array $parameters, $folder = 'INBOX')
+    public function __construct(Client $oClient, $language_id, array $parameters, User $user,$folder = 'INBOX')
     {
         $this->oClient = $oClient;
         $this->folder = $folder;
         $this->language_id = $language_id;
         $this->parameters = $parameters;
+        $this->user = $user;
     }
 
     /**
@@ -69,7 +73,8 @@ class FetchSMTPEmails implements ShouldQueue
                 }
             }
 
-        } catch (\Exception $exception) {
+            $this->sendNotification();
+        } catch (Exception $exception) {
             Log::error($exception);
         }
     }
@@ -130,5 +135,14 @@ class FetchSMTPEmails implements ShouldQueue
                 'path' => 'storage/attachments/' . $file
             ]);
         }
+    }
+
+    /**
+     * Send a live notification to the user to inform them that their emails were fetched.
+     * @return void
+     */
+    private function sendNotification()
+    {
+        $this->user->notify(new EmailFetchedNotification());
     }
 }
