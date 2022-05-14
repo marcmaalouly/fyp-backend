@@ -16,7 +16,7 @@ class GmailProviderRepository implements MailServerInterface
 
     public function fetch(Language $language)
     {
-        $job = new FetchGmailEmails($language->id);
+        $job = new FetchGmailEmails($language->id, auth()->user());
         dispatch($job);
     }
 

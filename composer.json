@@ -16,7 +16,8 @@
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
         "pusher/pusher-php-server": "^7.0",
-        "webklex/laravel-imap": "^2.4"
+        "webklex/laravel-imap": "^2.4",
+      "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
