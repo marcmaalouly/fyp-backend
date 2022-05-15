@@ -50,18 +50,15 @@ class CvParser
             }
         }
 
-        if ($candidate->email == 'marc.maalouly771122@gmail.com') {
-            dd($languageHasSkill);
-        }
-
         if (!$languageHasSkill) {
             $candidate->delete();
             return true;
         }
 
         $candidate->update([
-            'year_of_experience' => 10,
-            'skills' => $data['skills']
+            'year_of_experience' => $data['total_experience'],
+            'skills' => $data['skills'],
+            'experience' => $data['experience']
         ]);
 
     }
