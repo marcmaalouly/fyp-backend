@@ -44,7 +44,12 @@ class Candidate extends Model
         'mail_content_raw',
         'mail_content_html',
         'year_of_experience',
-        'language_id'
+        'language_id',
+        'skills'
+    ];
+
+    protected $casts = [
+        'skills' => 'array'
     ];
 
     public function language()

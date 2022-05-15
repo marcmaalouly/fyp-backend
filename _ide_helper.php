@@ -19981,6 +19981,7 @@ namespace  {
             class Flare extends \Facade\Ignition\Facades\Flare {}
             class Client extends \Webklex\IMAP\Facades\Client {}
             class FileHelper extends \App\Helpers\FileHelper {}
+            class CvParser extends \App\Helpers\CvParser {}
 }
 
 

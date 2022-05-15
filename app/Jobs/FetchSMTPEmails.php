@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\CvParser;
 use App\Models\Candidate;
 use App\Models\CandidateAttachment;
 use App\Models\User;
@@ -13,8 +14,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Webklex\PHPIMAP\Attachment;
 use Webklex\PHPIMAP\Client;
 use Webklex\PHPIMAP\ClientManager;
 use Webklex\PHPIMAP\Message;
@@ -106,35 +109,40 @@ class FetchSMTPEmails implements ShouldQueue
      */
     private function getAndStoreAttachments(Message $message, Candidate $candidate)
     {
-        $path = public_path('storage/attachments/' . $candidate->email . '/');
-
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0755, true);
-        }
-
         $attachments = $message->getAttachments()->all();
         foreach ($attachments as $attachment) {
-            $attachment->save($path);
+            /** @var Attachment $attachment */
+            if ($attachment->getExtension() == 'pdf') {
+                $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' . $candidate->email . '/');
+
+                if (!File::exists($path)) {
+                    File::makeDirectory($path, 0755, true);
+                }
+
+                $attachment->save($path);
+            }
         }
 
         $this->saveAttachmentInDB($candidate);
     }
 
     /**
-     * Save the files from the public folder into the database
+     * Save the files from the public folder into the database and send file to cv parser
      *
      * @param Candidate $candidate
      * @return void
      */
     private function saveAttachmentInDB(Candidate $candidate)
     {
-        $files = Storage::disk('attachments')->allFiles($candidate->email);
+        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->email);
         foreach ($files as $file) {
             CandidateAttachment::create([
                 'candidate_id' => $candidate->id,
                 'path' => 'storage/attachments/' . $file
             ]);
         }
+
+        CvParser::parse($files, $candidate);
     }
 
     /**
