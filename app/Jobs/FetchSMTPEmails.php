@@ -31,7 +31,7 @@ class FetchSMTPEmails implements ShouldQueue
     /**
      * @param Client $oClient
      */
-    public function __construct(Client $oClient, $language_id, array $parameters, User $user,$folder = 'INBOX')
+    public function __construct(Client $oClient, $language_id, array $parameters, User $user, $folder = 'INBOX')
     {
         $this->oClient = $oClient;
         $this->folder = $folder;
@@ -48,37 +48,59 @@ class FetchSMTPEmails implements ShouldQueue
     public function handle()
     {
         try {
-            ClientManager::$config=config('imap');
+            ClientManager::$config = config('imap');
             $oFolder = $this->oClient->getFolder($this->folder);
 
-            switch ($this->parameters['method']) {
-                case 'fetchBySubject':
-                    $messages = $oFolder->query()->subject($this->parameters['content'])->get();
-                    break;
-                case 'fetchByDate':
-                    $messages = $oFolder->query()->on($this->parameters['content'])->get();
-                    break;
-                case 'fetchByEmail':
-                    $messages = $oFolder->query()->from($this->parameters['content'])->get();
-                    break;
-                default:
-                    $messages = $oFolder->query()->unseen()->get();
-                    break;
-            }
+            $messages = $this->fetchMessages($oFolder);
 
-            foreach ($messages as $message)
-            {
-                $candidate = $this->createCandidate($message);
-
-                if ($message->hasAttachments())
-                {
-                    $this->getAndStoreAttachments($message, $candidate);
-                }
-            }
+            $this->readMessages($messages);
 
             $this->sendNotification();
         } catch (Exception $exception) {
             Log::error($exception);
+        }
+    }
+
+    /**
+     * Choose the method based on the parameter and fetch all emails
+     *
+     * @param $oFolder
+     * @return mixed
+     */
+    private function fetchMessages($oFolder)
+    {
+        $initiatedMessage = $oFolder->query();
+        switch ($this->parameters['method']) {
+            case 'fetchBySubject':
+                $messages = $initiatedMessage->subject($this->parameters['content'])->get();
+                break;
+            case 'fetchByDate':
+                $messages = $initiatedMessage->on($this->parameters['content'])->get();
+                break;
+            case 'fetchByEmail':
+                $messages = $initiatedMessage->from($this->parameters['content'])->get();
+                break;
+            default:
+                $messages = $initiatedMessage->unseen()->get();
+                break;
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Loop through the fetched messages
+     * @param $messages
+     * @return void
+     */
+    private function readMessages($messages)
+    {
+        foreach ($messages as $message) {
+            $candidate = $this->createCandidate($message);
+
+            if ($message->hasAttachments()) {
+                $this->getAndStoreAttachments($message, $candidate);
+            }
         }
     }
 
@@ -113,7 +135,8 @@ class FetchSMTPEmails implements ShouldQueue
         foreach ($attachments as $attachment) {
             /** @var Attachment $attachment */
             if ($attachment->getExtension() == 'pdf') {
-                $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' . $candidate->email . '/');
+                $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' .
+                    $candidate->email . '/' . $candidate->language_id . '/');
 
                 if (!File::exists($path)) {
                     File::makeDirectory($path, 0755, true);
@@ -134,7 +157,9 @@ class FetchSMTPEmails implements ShouldQueue
      */
     private function saveAttachmentInDB(Candidate $candidate)
     {
-        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->email);
+        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->email
+            . '/' . $candidate->language_id);
+
         foreach ($files as $file) {
             CandidateAttachment::create([
                 'candidate_id' => $candidate->id,

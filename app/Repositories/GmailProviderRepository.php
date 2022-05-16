@@ -14,25 +14,49 @@ class GmailProviderRepository implements MailServerInterface
         LaravelGmail::makeToken();
     }
 
-    public function fetch(Language $language)
+    public function runJob(Language $language, $method)
     {
-        $job = new FetchGmailEmails($language->id, auth()->user());
+        $job = new FetchGmailEmails($language->id, auth()->user(), $method);
         dispatch($job);
     }
 
-    public function fetchBySubject(string $subject)
+    public function fetch(Language $language)
     {
-        // TODO: Implement fetchBySubject() method.
+        $parameters = [
+            'method' => __FUNCTION__
+        ];
+
+        $this->runJob($language, $parameters);
     }
 
-    public function fetchByDate($date)
+    public function fetchBySubject(string $subject, Language $language)
     {
-        // TODO: Implement fetchByDate() method.
+        $parameters = [
+            'method' => __FUNCTION__,
+            'content' => $subject
+        ];
+
+        $this->runJob($language, $parameters);
     }
 
-    public function fetchByEmail(string $email)
+    public function fetchByDate($date, Language $language)
     {
-        // TODO: Implement fetchByEmail() method.
+        $parameters = [
+            'method' => __FUNCTION__,
+            'content' => $date
+        ];
+
+        $this->runJob($language, $parameters);
+    }
+
+    public function fetchByEmail(string $email, Language $language)
+    {
+        $parameters = [
+            'method' => __FUNCTION__,
+            'content' => $email
+        ];
+
+        $this->runJob($language, $parameters);
     }
 
     public function fetchAttachments($message)

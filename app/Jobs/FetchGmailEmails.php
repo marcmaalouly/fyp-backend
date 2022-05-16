@@ -2,32 +2,42 @@
 
 namespace App\Jobs;
 
+use App\Helpers\CvParser;
 use App\Models\Candidate;
+use App\Models\CandidateAttachment;
 use App\Models\User;
+use App\Notifications\EmailFetchedNotification;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use Dacastro4\LaravelGmail\Services\Message;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class FetchGmailEmails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $language_id;
     protected $user;
+    protected $parameters;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($language_id, User $user)
+    public function __construct($language_id, User $user, array $parameters)
     {
         $this->language_id = $language_id;
         $this->user = $user;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -37,19 +47,136 @@ class FetchGmailEmails implements ShouldQueue
      */
     public function handle()
     {
-        Auth::login($this->user);
-        /** @var LaravelGmail $messages */
-        $messages = LaravelGmail::message()->unread()->preload()->all();
+        try {
+            Auth::login($this->user);
+
+            $messages = $this->fetchMessages();
+
+            $this->readMessages($messages);
+
+            $this->sendNotification();
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+    }
+
+    /**
+     * Choose the method based on the parameter and fetch all emails
+     *
+     * @return mixed
+     */
+    private function fetchMessages()
+    {
+        $initiatedMessage = LaravelGmail::message();
+
+        switch ($this->parameters['method']) {
+            case 'fetchBySubject':
+                $messages = $initiatedMessage->subject($this->parameters['content']);
+                break;
+            case 'fetchByDate':
+                $messages = $initiatedMessage->after($this->parameters['content']);
+                break;
+            case 'fetchByEmail':
+                $messages = $initiatedMessage->from($this->parameters['content']);
+                break;
+            default:
+                $messages = $initiatedMessage;
+                break;
+        }
+
+        return $messages->unread()->preload()->all();
+    }
+
+    /**
+     * Loop through the fetched messages
+     * @param $messages
+     * @return void
+     */
+    private function readMessages($messages)
+    {
         foreach ( $messages as $message ) {
             /** @var Message\Mail $message */
-            $data = [
-                'email' => $message->getFromEmail(),
-                'mail_content_raw' => $message->getPlainTextBody(),
-                'mail_content_html' => $message->getHtmlBody(),
-                'language_id' => $this->language_id
-            ];
-
-            Candidate::create($data);
+            $candidate = $this->createCandidate($message);
+            if ($message->hasAttachments()) {
+                $this->getAndStoreAttachments($message, $candidate);
+            }
         }
+    }
+
+    /**
+     * Create the candidate with all his info after retrieving the email
+     *
+     * @param Message\Mail $message
+     * @return Candidate|Model
+     */
+    private function createCandidate(Message\Mail $message)
+    {
+        $data = [
+            'email' => $message->getFromEmail(),
+            'mail_content_raw' => $message->getPlainTextBody(),
+            'mail_content_html' => $message->getHtmlBody(),
+            'language_id' => $this->language_id
+        ];
+
+        return Candidate::create($data);
+    }
+
+    /**
+     * Fetch the attached files in the email and store them in the public folder
+     *
+     * @param Message\Mail $message
+     * @param Candidate $candidate
+     * @return void
+     */
+    private function getAndStoreAttachments(Message\Mail $message, Candidate $candidate)
+    {
+        $attachments = $message->getAttachments()->all();
+        foreach ($attachments as $attachment)
+        {
+            /** @var Message\Attachment $attachment */
+            if($attachment->getMimeType() == 'pdf')
+            {
+                $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' .
+                    $candidate->email . '/' . $candidate->language_id . '/');
+
+                if (!File::exists($path)) {
+                    File::makeDirectory($path, 0755, true);
+                }
+
+                $attachment->saveAttachmentTo($path);
+            }
+
+            $this->saveAttachmentInDB($candidate);
+        }
+    }
+
+    /**
+     * Save the files from the public folder into the database and send file to cv parser
+     *
+     * @param Candidate $candidate
+     * @return void
+     */
+    private function saveAttachmentInDB(Candidate $candidate)
+    {
+        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->email
+            . '/' . $candidate->language_id);
+
+        foreach ($files as $file) {
+            CandidateAttachment::create([
+                'candidate_id' => $candidate->id,
+                'path' => 'storage/attachments/' . $file
+            ]);
+        }
+
+        CvParser::parse($files, $candidate);
+    }
+
+    /**
+     * Send a live notification to the user to inform them that their emails were fetched.
+     * @return void
+     */
+    private function sendNotification()
+    {
+        $this->user->notify(new EmailFetchedNotification());
     }
 }
