@@ -136,7 +136,7 @@ class FetchSMTPEmails implements ShouldQueue
             /** @var Attachment $attachment */
             if ($attachment->getExtension() == 'pdf') {
                 $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' .
-                    $candidate->email . '/' . $candidate->language_id . '/');
+                    $candidate->language_id . '/' . $candidate->email . '/');
 
                 if (!File::exists($path)) {
                     File::makeDirectory($path, 0755, true);
@@ -157,8 +157,8 @@ class FetchSMTPEmails implements ShouldQueue
      */
     private function saveAttachmentInDB(Candidate $candidate)
     {
-        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->email
-            . '/' . $candidate->language_id);
+        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->language_id
+            . '/' . $candidate->email);
 
         foreach ($files as $file) {
             CandidateAttachment::create([

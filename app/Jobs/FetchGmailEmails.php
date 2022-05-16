@@ -97,6 +97,7 @@ class FetchGmailEmails implements ShouldQueue
         foreach ( $messages as $message ) {
             /** @var Message\Mail $message */
             $candidate = $this->createCandidate($message);
+
             if ($message->hasAttachments()) {
                 $this->getAndStoreAttachments($message, $candidate);
             }
@@ -134,16 +135,17 @@ class FetchGmailEmails implements ShouldQueue
         foreach ($attachments as $attachment)
         {
             /** @var Message\Attachment $attachment */
-            if($attachment->getMimeType() == 'pdf')
+            if($attachment->getMimeType() == 'application/pdf' || str_contains($attachment->getMimeType(), 'pdf'))
             {
-                $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' .
-                    $candidate->email . '/' . $candidate->language_id . '/');
+                $path = $candidate->language->position->user_id . '/' . $candidate->language_id . '/' . $candidate->email;
 
-                if (!File::exists($path)) {
-                    File::makeDirectory($path, 0755, true);
+                $public_path = public_path('storage/attachments/' . $path . '/');
+
+                if (!File::exists($public_path)) {
+                    File::makeDirectory($public_path, 0755, true);
                 }
 
-                $attachment->saveAttachmentTo($path);
+                $attachment->saveAttachmentTo($path, $attachment->getFileName(), 'attachments');
             }
 
             $this->saveAttachmentInDB($candidate);
@@ -158,8 +160,8 @@ class FetchGmailEmails implements ShouldQueue
      */
     private function saveAttachmentInDB(Candidate $candidate)
     {
-        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->email
-            . '/' . $candidate->language_id);
+        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->language_id
+            . '/' . $candidate->email);
 
         foreach ($files as $file) {
             CandidateAttachment::create([
