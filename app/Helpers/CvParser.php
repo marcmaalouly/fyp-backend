@@ -13,11 +13,11 @@ class CvParser
     {
         foreach ($files as $file) {
             $fileContent = File::get(public_path('storage/attachments/' . $file));
-            self::sentToPython($fileContent, $candidate);
+            self::sendToPython($fileContent, $candidate);
         }
     }
 
-    private static function sentToPython($file, Candidate $candidate)
+    private static function sendToPython($file, Candidate $candidate)
     {
         $response = Http::attach(
             'file',

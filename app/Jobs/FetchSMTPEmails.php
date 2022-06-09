@@ -96,9 +96,8 @@ class FetchSMTPEmails implements ShouldQueue
     private function readMessages($messages)
     {
         foreach ($messages as $message) {
-            $candidate = $this->createCandidate($message);
-
             if ($message->hasAttachments()) {
+                $candidate = $this->createCandidate($message);
                 $this->getAndStoreAttachments($message, $candidate);
             }
         }
@@ -134,7 +133,7 @@ class FetchSMTPEmails implements ShouldQueue
         $attachments = $message->getAttachments()->all();
         foreach ($attachments as $attachment) {
             /** @var Attachment $attachment */
-            if ($attachment->getExtension() == 'pdf') {
+            if ($attachment->getExtension() == 'pdf' || $attachment->getExtension() == 'docx') {
                 $path = public_path('storage/attachments/' . $candidate->language->position->user_id . '/' .
                     $candidate->language_id . '/' . $candidate->email . '/');
 
