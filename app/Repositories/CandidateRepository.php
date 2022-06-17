@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Candidate;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class CandidateRepository
 {
@@ -21,10 +23,40 @@ class CandidateRepository
         return $this->model::create($attributes);
     }
 
-    public function where($column, $attribute): CandidateRepository
+    public function where($column, $attribute, $operation = null): CandidateRepository
     {
-        $this->model = $this->model::where($column, $attribute);
+        $this->model = $this->model->where($column, $operation, $attribute);
         return $this;
+    }
+
+    public function orderBy($column, $direction): CandidateRepository
+    {
+        $this->model = $this->model::orderBy($column, $direction);
+        return $this;
+    }
+
+    public function whereDataTable($search, $start_date = null, $end_date = null)
+    {
+        $this->model = $this->model->where(function (Builder $query) use ($search, $start_date, $end_date) {
+            if ($start_date && $end_date) {
+                $start_date = Carbon::createFromFormat('Y-m-d', $start_date);
+
+                $end_date = Carbon::createFromFormat('Y-m-d', $end_date);
+
+                return $query->whereBetween('date', [$start_date, $end_date])
+                    ->orWhere('full_name', "like", "%{$search}%")
+                    ->orWhere('email', "like", "%{$search}%");
+            } else {
+                return $query->where('full_name', "like", "%{$search}%")
+                    ->orWhere('email', "like", "%{$search}%");
+            }
+        });
+        return $this;
+    }
+
+    public function paginate($length = 10)
+    {
+        return $this->model->paginate($length);
     }
 
     public function with($relation): CandidateRepository
@@ -32,6 +64,7 @@ class CandidateRepository
         $this->model = $this->model->with($relation);
         return $this;
     }
+
     public function get()
     {
         return $this->model->get();

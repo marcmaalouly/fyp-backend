@@ -24,9 +24,9 @@ class CandidateController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Position $position, Language $language)
+    public function index(Request $request, Position $position, Language $language)
     {
-        return $this->service->get($language);
+        return $this->service->get($request, $language);
     }
 
     /**
