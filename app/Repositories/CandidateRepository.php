@@ -29,7 +29,7 @@ class CandidateRepository
 
     public function with($relation): CandidateRepository
     {
-        $this->model = $this->model::with($relation);
+        $this->model = $this->model->with($relation);
         return $this;
     }
     public function get()
