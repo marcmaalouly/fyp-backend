@@ -25,7 +25,11 @@ class CandidateRepository
 
     public function where($column, $attribute, $operation = null): CandidateRepository
     {
-        $this->model = $this->model->where($column, $operation, $attribute);
+        if ($operation) {
+            $this->model = $this->model->where($column, $operation, $attribute);
+        } else {
+            $this->model = $this->model->where($column, $attribute);
+        }
         return $this;
     }
 

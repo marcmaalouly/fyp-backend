@@ -22,7 +22,7 @@ class CandidateController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource
      */
     public function index(Request $request, Position $position, Language $language)
     {

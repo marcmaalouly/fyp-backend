@@ -58,7 +58,8 @@ class CvParser
         $candidate->update([
             'year_of_experience' => $data['total_experience'],
             'skills' => $data['skills'],
-            'experience' => $data['experience']
+            'experience' => $data['experience'],
+            'full_name' => $data['full_name']
         ]);
 
     }
