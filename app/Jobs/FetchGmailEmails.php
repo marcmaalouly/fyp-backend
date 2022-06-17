@@ -96,9 +96,8 @@ class FetchGmailEmails implements ShouldQueue
     {
         foreach ( $messages as $message ) {
             /** @var Message\Mail $message */
-            $candidate = $this->createCandidate($message);
-
             if ($message->hasAttachments()) {
+                $candidate = $this->createCandidate($message);
                 $this->getAndStoreAttachments($message, $candidate);
             }
         }
