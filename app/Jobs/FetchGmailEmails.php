@@ -116,7 +116,8 @@ class FetchGmailEmails implements ShouldQueue
             'email' => $message->getFromEmail(),
             'mail_content_raw' => $message->getPlainTextBody(),
             'mail_content_html' => $message->getHtmlBody(),
-            'language_id' => $this->language_id
+            'language_id' => $this->language_id,
+            'date' => $message->getDate()
         ];
 
         return Candidate::create($data);

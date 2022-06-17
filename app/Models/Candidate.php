@@ -46,7 +46,12 @@ class Candidate extends Model
         'year_of_experience',
         'language_id',
         'skills',
-        'experience'
+        'experience',
+        'date'
+    ];
+
+    protected $dates = [
+        'date'
     ];
 
     protected $casts = [

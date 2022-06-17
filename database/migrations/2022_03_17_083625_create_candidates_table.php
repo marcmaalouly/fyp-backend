@@ -20,6 +20,7 @@ class CreateCandidatesTable extends Migration
             $table->longText('mail_content_raw')->nullable();
             $table->longText('mail_content_html')->nullable();
             $table->string('year_of_experience')->default(0);
+            $table->dateTime('date')->nullable();
             $table->json('skills')->nullable();
             $table->json('experience')->nullable();
 
