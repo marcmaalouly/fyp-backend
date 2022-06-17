@@ -26,6 +26,7 @@ class CandidateService
 
     public function get(Language $language)
     {
-        return $this->success($this->repository->where('language_id', $language->id)->get(), 'Candidates Fetched');
+        return $this->success($this->repository->where('language_id', $language->id)
+            ->with('attachments')->get(), 'Candidates Fetched');
     }
 }

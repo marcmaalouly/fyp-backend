@@ -63,4 +63,9 @@ class Candidate extends Model
     {
         return $this->belongsTo(Language::class);
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(CandidateAttachment::class);
+    }
 }
