@@ -131,6 +131,7 @@ class FetchSMTPEmails implements ShouldQueue
     private function getAndStoreAttachments(Message $message, Candidate $candidate)
     {
         $attachments = $message->getAttachments()->all();
+        $flag = false;
         foreach ($attachments as $attachment) {
             /** @var Attachment $attachment */
             if ($attachment->getExtension() == 'pdf' || $attachment->getExtension() == 'docx') {
@@ -142,10 +143,16 @@ class FetchSMTPEmails implements ShouldQueue
                 }
 
                 $attachment->save($path);
+                $flag = true;
             }
         }
 
-        $this->saveAttachmentInDB($candidate);
+        //Check if the candidate has an attached cv, if true keep in the database else delete the candidate
+        if ($flag) {
+            $this->saveAttachmentInDB($candidate);
+        } else {
+            $candidate->delete();
+        }
     }
 
     /**

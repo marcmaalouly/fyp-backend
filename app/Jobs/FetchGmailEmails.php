@@ -132,6 +132,7 @@ class FetchGmailEmails implements ShouldQueue
     private function getAndStoreAttachments(Message\Mail $message, Candidate $candidate)
     {
         $attachments = $message->getAttachments()->all();
+        $flag = false;
         foreach ($attachments as $attachment)
         {
             /** @var Message\Attachment $attachment */
@@ -146,9 +147,15 @@ class FetchGmailEmails implements ShouldQueue
                 }
 
                 $attachment->saveAttachmentTo($path, $attachment->getFileName(), 'attachments');
+                $flag = true;
             }
+        }
 
+        //Check if the candidate has an attached cv, if true keep in the database else delete the candidate
+        if ($flag) {
             $this->saveAttachmentInDB($candidate);
+        } else {
+            $candidate->delete();
         }
     }
 
