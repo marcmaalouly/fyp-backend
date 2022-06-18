@@ -14,7 +14,7 @@ trait ServiceTrait
             'code' => $code
         ];
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function success($data = [], $message = '')
