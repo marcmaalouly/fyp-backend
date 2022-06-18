@@ -7,6 +7,7 @@ use App\Models\Candidate;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class UserService
 {
@@ -76,9 +77,37 @@ class UserService
         return $this->error('No Longer Authenticated');
     }
 
-    public function favoriteCandidates()
+    public function favoriteCandidates(Request $request)
     {
-        return $this->success(auth()->user()->favorite_candidates()->with('language')->get(), 'Favorites Fetched');
+        $orderBy = $request->input('column', 'id'); //Index
+        $orderByDir = $request->input('dir', 'asc');
+        $length = $request->input('length');
+        $searchValue = $request->input('search');
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+
+        $values = [
+            'orderBy' => $orderBy,
+            'oderByDir' => $orderByDir,
+            'length' => $length,
+            'search' => $searchValue,
+            'start_date' => $start_date,
+            'end_date' => $end_date
+        ];
+
+        $candidates = $this->repository->dataTableReturn($values);
+
+        $candidates = $candidates->map(function (Candidate $candidate) {
+            $is_favorite = false;
+            if ($candidate->favored_by_users()->where('candidate_user.user_id', auth()->user()->id)->exists()) {
+                $is_favorite = true;
+            }
+
+            $candidate['is_favorite'] = $is_favorite;
+            return $candidate;
+        });
+
+        return new DataTableCollectionResource($candidates);
     }
 
     public function storeFavoriteCandidate(Candidate $candidate)

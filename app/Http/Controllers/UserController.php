@@ -18,9 +18,9 @@ class UserController extends Controller
         $this->service = $service;
     }
 
-    public function favorites()
+    public function favorites(Request $request)
     {
-        return $this->service->favoriteCandidates();
+        return $this->service->favoriteCandidates($request);
     }
 
     public function storeFavorite(Candidate $candidate)
