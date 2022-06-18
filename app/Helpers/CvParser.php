@@ -59,7 +59,7 @@ class CvParser
             'year_of_experience' => $data['total_experience'],
             'skills' => $data['skills'],
             'experience' => $data['experience'],
-            'full_name' => $data['full_name']
+            'full_name' => $data['name']
         ]);
 
     }

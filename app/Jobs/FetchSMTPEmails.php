@@ -115,7 +115,8 @@ class FetchSMTPEmails implements ShouldQueue
             'email' => $message->getFrom()[0]->mail,
             'mail_content_raw' => $message->getTextBody(),
             'mail_content_html' => $message->getHTMLBody(true),
-            'language_id' => $this->language_id
+            'language_id' => $this->language_id,
+            'date' => $message->getDate()
         ];
 
         return Candidate::create($data);
