@@ -42,6 +42,9 @@ class CandidateRepository
     public function whereDataTable($search, $start_date = null, $end_date = null)
     {
         if ($start_date && $end_date) {
+            $start_date = Carbon::parse($start_date)->startOfDay();
+            $end_date = Carbon::parse($end_date)->endOfDay();
+
             $this->model = $this->model->whereBetween('date', [$start_date, $end_date]);
         }
 

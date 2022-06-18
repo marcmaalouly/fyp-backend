@@ -28,6 +28,8 @@ class UserRepository
     {
         $query = auth()->user()->favorite_candidates()->orderBy($values['orderBy'], $values['oderByDir']);
         if ($values['start_date'] && $values["end_date"]) {
+            $values['start_date'] = Carbon::parse($values['start_date'])->startOfDay();
+            $values['end_date'] = Carbon::parse($values['end_date'])->endOfDay();
             $query = $query->whereBetween('date', [$values['start_date'], $values["end_date"]]);
         }
 
