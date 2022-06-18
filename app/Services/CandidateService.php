@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Candidate;
 use App\Models\Language;
 use App\Repositories\CandidateRepository;
 use App\Http\Traits\ServiceTrait;
@@ -35,9 +36,21 @@ class CandidateService
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
 
-        return new DataTableCollectionResource($this->repository->orderBy($orderBy, $orderByDir)
+        $candidates = tap($this->repository->orderBy($orderBy, $orderByDir)
             ->where('language_id', $language->id)
             ->whereDataTable($searchValue, $start_date, $end_date)
             ->with('attachments')->paginate($length));
+
+        $candidates->map(function (Candidate $candidate) {
+           $is_favorite = false;
+           if ($candidate->favored_by_users()->where('candidate_user.user_id', auth()->user()->id)->exists()) {
+               $is_favorite = true;
+           }
+
+           $candidate['is_favorite'] = $is_favorite;
+           return $candidate;
+        });
+
+        return new DataTableCollectionResource($candidates);
     }
 }
