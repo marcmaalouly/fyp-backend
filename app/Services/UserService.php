@@ -83,8 +83,8 @@ class UserService
         $orderByDir = $request->input('dir', 'asc');
         $length = $request->input('length');
         $searchValue = $request->input('search');
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $start_date = $request->input('startDate');
+        $end_date = $request->input('endDate');
 
         $values = [
             'orderBy' => $orderBy,
