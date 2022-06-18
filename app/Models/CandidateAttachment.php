@@ -11,6 +11,7 @@ class CandidateAttachment extends Model
 
     protected $fillable = [
         'candidate_id',
-        'path'
+        'path',
+        'name'
     ];
 }

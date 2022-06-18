@@ -173,7 +173,8 @@ class FetchGmailEmails implements ShouldQueue
         foreach ($files as $file) {
             CandidateAttachment::create([
                 'candidate_id' => $candidate->id,
-                'path' => 'storage/attachments/' . $file
+                'path' => 'storage/attachments/' . $file,
+                'name' => explode($candidate->email . "/", $file)[1]
             ]);
         }
 

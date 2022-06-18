@@ -41,7 +41,7 @@ class CandidateService
             ->whereDataTable($searchValue, $start_date, $end_date)
             ->with('attachments')->paginate($length));
 
-        $candidates->map(function (Candidate $candidate) {
+        $candidates = $candidates->map(function (Candidate $candidate) {
            $is_favorite = false;
            if ($candidate->favored_by_users()->where('candidate_user.user_id', auth()->user()->id)->exists()) {
                $is_favorite = true;
