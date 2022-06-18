@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Traits\ServiceTrait;
+use App\Models\Candidate;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -73,5 +74,23 @@ class UserService
         }
 
         return $this->error('No Longer Authenticated');
+    }
+
+    public function favoriteCandidates()
+    {
+        return $this->success(auth()->user()->favorite_candidates()->with('language')->get(), 'Favorites Fetched');
+    }
+
+    public function storeFavoriteCandidate(Candidate $candidate)
+    {
+        $query = auth()->user()->favorite_candidates();
+
+        if ($query->where('candidate_user.candidate_id', $candidate->id)->exists()) {
+            $query->detach($candidate->id);
+            return $this->success([], 'Favorite Removed');
+        }
+
+        $query->attach($candidate->id);
+        return $this->success([], 'Favorite Stored');
     }
 }

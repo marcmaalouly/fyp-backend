@@ -70,4 +70,9 @@ class Candidate extends Model
     {
         return $this->hasMany(CandidateAttachment::class);
     }
+
+    public function favored_by_users()
+    {
+        return $this->belongsToMany(User::class, 'candidate_user', 'candidate_id');
+    }
 }

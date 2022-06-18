@@ -7,6 +7,7 @@ use App\Http\Controllers\MailConnectionController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\SkillKeyController;
+use App\Http\Controllers\UserController;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('me', [AuthController::class, 'me']);
 
     Route::get('menu', [MenuController::class, 'index']);
+
+    Route::get('favorites', [UserController::class, 'favorites']);
+    Route::post('favorite/{candidate}', [UserController::class, 'storeFavorite']);
 
     Route::get('skills', [SkillKeyController::class, 'index']);
 

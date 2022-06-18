@@ -101,4 +101,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Position::class);
     }
+
+    public function favorite_candidates()
+    {
+        return $this->belongsToMany(Candidate::class, 'candidate_user', 'user_id');
+    }
 }
