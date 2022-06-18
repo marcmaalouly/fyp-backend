@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ZoomConnectionRequest;
 use App\Models\Candidate;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -26,5 +27,15 @@ class UserController extends Controller
     public function storeFavorite(Candidate $candidate)
     {
         return $this->service->storeFavoriteCandidate($candidate);
+    }
+
+    public function connectToZoom(ZoomConnectionRequest $request)
+    {
+        return $this->service->connectToZoom($request);
+    }
+
+    public function checkIfConnectedToZoom()
+    {
+        return $this->service->checkIfConnectedToZoom();
     }
 }

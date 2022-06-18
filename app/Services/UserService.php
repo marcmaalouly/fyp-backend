@@ -7,6 +7,7 @@ use App\Models\Candidate;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class UserService
@@ -121,5 +122,32 @@ class UserService
 
         $query->attach($candidate->id);
         return $this->success([], 'Favorite Stored');
+    }
+
+    public function connectToZoom(Request $request)
+    {
+        $validatedData = $this->validate($request);
+
+        $base64_authorization = base64_encode(env('ZOOM_CLIENT_ID') . ":" . env("ZOOM_CLIENT_SECRET"));
+
+        $query = "code={$validatedData['code']}&grant_type=authorization_code&redirect_uri=" . env("ZOOM_REDIRECT_URI");
+        $url = "https://zoom.us/oauth/token?$query";
+
+        $response = Http::withHeaders(['Authorization' => "Basic $base64_authorization",
+            'Content-Type' => "application/x-www-form-urlencoded"])->post($url);
+
+        if ($response->status() == 200) {
+            $data = collect(json_decode($response->body()))->toArray();
+            auth()->user()->zoom_information()->create($data);
+
+            return $this->success([], "Connected Successfully");
+        } else {
+            return $this->error(["Error while connection to zoom"], 500);
+        }
+    }
+
+    public function checkIfConnectedToZoom()
+    {
+        return $this->success(["is_connected" => auth()->user()->zoom_information()->exists(), "Checked"]);
     }
 }

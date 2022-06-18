@@ -106,4 +106,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Candidate::class, 'candidate_user', 'user_id');
     }
+
+    public function zoom_information()
+    {
+        return $this->hasOne(ZoomInformation::class, 'user_id');
+    }
 }

@@ -25,6 +25,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('favorites', [UserController::class, 'favorites']);
     Route::post('favorite/{candidate}', [UserController::class, 'storeFavorite']);
 
+    Route::post('zoom-connect', [UserController::class, 'connectToZoom']);
+    Route::get('zoom-check', [UserController::class, 'checkIfConnectedToZoom']);
+
     Route::get('skills', [SkillKeyController::class, 'index']);
 
     Route::get('positions', [PositionController::class, 'index']);
