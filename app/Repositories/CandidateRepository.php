@@ -42,9 +42,6 @@ class CandidateRepository
     public function whereDataTable($search, $start_date = null, $end_date = null)
     {
         if ($start_date && $end_date) {
-            $start_date = Carbon::createFromFormat('Y-m-d', $start_date);
-            $end_date = Carbon::createFromFormat('Y-m-d', $end_date);
-
             $this->model = $this->model->whereBetween('date', [$start_date, $end_date]);
         }
 
