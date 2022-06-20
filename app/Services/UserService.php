@@ -176,11 +176,13 @@ class UserService
         }
     }
 
-    public function getMeetings()
+    public function getMeetings(Request $request)
     {
         $meetings = auth()->user()->candidate_meetings()->get();
-        $meetings = $meetings->map(function ($meeting) {
-            $meeting_time = Carbon::parse($meeting['start_time']);
+        $meetings = $meetings->map(function ($meeting) use ($request) {
+            $meeting_time = Carbon::parse($meeting['start_time'])
+                ->timezone($request->input('timezone') ?? 'Asia/Beirut');
+
            $meeting['start'] = $meeting_time->format('Y-m-d');
            $meeting['end'] = $meeting_time->addHour()->format('Y-m-d');
            $meeting['allDay'] = false;
