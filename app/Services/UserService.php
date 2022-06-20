@@ -180,8 +180,11 @@ class UserService
     {
         $meetings = auth()->user()->candidate_meetings()->get();
         $meetings = $meetings->map(function ($meeting) {
-           $meeting['start_date'] = $meeting['start_time'];
-           $meeting['end_date'] = Carbon::parse($meeting['start_time'])->addHour();
+            $meeting_time = Carbon::parse($meeting['start_time']);
+           $meeting['start'] = $meeting_time->format('Y-m-d');
+           $meeting['end'] = $meeting_time->addHour()->format('Y-m-d');
+           $meeting['allDay'] = false;
+           $meeting['editable'] = false;
            return $meeting;
         });
 
