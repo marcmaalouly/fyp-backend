@@ -41,7 +41,7 @@ class CandidateService
             ->whereDataTable($searchValue, $start_date, $end_date)
             ->with('attachments')->paginate($length));
 
-        $candidates =  $candidates = Candidate::mapInformation($candidates);
+        $candidates = Candidate::mapInformation($candidates);
 
         return new DataTableCollectionResource($candidates);
     }
