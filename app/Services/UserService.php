@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Traits\ServiceTrait;
 use App\Models\Candidate;
 use App\Repositories\UserRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -173,5 +174,17 @@ class UserService
         } else {
             return $this->error(["Error while creating zoom meeting"], 500);
         }
+    }
+
+    public function getMeetings()
+    {
+        $meetings = auth()->user()->candidate_meetings()->get();
+        $meetings = $meetings->map(function ($meeting) {
+           $meeting['start_date'] = $meeting['start_time'];
+           $meeting['end_date'] = Carbon::parse($meeting['start_time'])->addHour();
+           return $meeting;
+        });
+
+        return $this->success($meetings, "Meetings Fetched");
     }
 }

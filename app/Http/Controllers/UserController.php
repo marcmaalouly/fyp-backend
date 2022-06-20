@@ -44,4 +44,9 @@ class UserController extends Controller
     {
         return $this->service->createMeeting($request, $candidate);
     }
+
+    public function getMeetings()
+    {
+        return $this->service->getMeetings();
+    }
 }

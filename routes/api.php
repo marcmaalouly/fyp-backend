@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('zoom-connect', [UserController::class, 'connectToZoom']);
     Route::get('zoom-check', [UserController::class, 'checkIfConnectedToZoom']);
     Route::post('zoom-meeting/{candidate}', [UserController::class, 'createMeeting']);
+    Route::get('zoom-meetings', [UserController::class, 'getMeetings']);
 
     Route::get('skills', [SkillKeyController::class, 'index']);
 
