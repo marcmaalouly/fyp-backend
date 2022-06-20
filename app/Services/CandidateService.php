@@ -41,22 +41,7 @@ class CandidateService
             ->whereDataTable($searchValue, $start_date, $end_date)
             ->with('attachments')->paginate($length));
 
-        $candidates = $candidates->map(function (Candidate $candidate) {
-           $is_favorite = false;
-           if ($candidate->favored_by_users()->where('candidate_user.user_id', auth()->user()->id)->exists()) {
-               $is_favorite = true;
-           }
-
-           $query = $candidate->meetings()->where('user_id', auth()->user()->id);
-           $candidate['meetings'] = [];
-
-           if ($query->exists()) {
-               $candidate['meetings'] = $query->get();
-           }
-
-           $candidate['is_favorite'] = $is_favorite;
-           return $candidate;
-        });
+        $candidates =  $candidates = Candidate::mapInformation($candidates);
 
         return new DataTableCollectionResource($candidates);
     }

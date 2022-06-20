@@ -98,15 +98,7 @@ class UserService
 
         $candidates = $this->repository->dataTableReturn($values);
 
-        $candidates = $candidates->map(function (Candidate $candidate) {
-            $is_favorite = false;
-            if ($candidate->favored_by_users()->where('candidate_user.user_id', auth()->user()->id)->exists()) {
-                $is_favorite = true;
-            }
-
-            $candidate['is_favorite'] = $is_favorite;
-            return $candidate;
-        });
+        $candidates = Candidate::mapInformation($candidates);
 
         return new DataTableCollectionResource($candidates);
     }
