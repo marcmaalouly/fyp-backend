@@ -86,4 +86,9 @@ class Candidate extends Model
     {
         return $this->belongsToMany(User::class, 'candidate_user', 'candidate_id');
     }
+
+    public function meetings()
+    {
+        return $this->hasMany(CandidateMeeting::class);
+    }
 }

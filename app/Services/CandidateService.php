@@ -47,6 +47,13 @@ class CandidateService
                $is_favorite = true;
            }
 
+           $query = $candidate->meetings()->where('user_id', auth()->user()->id);
+           $candidate['meetings'] = [];
+
+           if ($query->exists()) {
+               $candidate['meetings'] = $query->get();
+           }
+
            $candidate['is_favorite'] = $is_favorite;
            return $candidate;
         });
