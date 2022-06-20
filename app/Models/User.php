@@ -48,6 +48,11 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CandidateMeeting[] $candidate_meetings
+ * @property-read int|null $candidate_meetings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Candidate[] $favorite_candidates
+ * @property-read int|null $favorite_candidates_count
+ * @property-read \App\Models\ZoomInformation|null $zoom_information
  */
 class User extends Authenticatable
 {
@@ -110,5 +115,10 @@ class User extends Authenticatable
     public function zoom_information()
     {
         return $this->hasOne(ZoomInformation::class, 'user_id');
+    }
+
+    public function candidate_meetings()
+    {
+        return $this->hasMany(CandidateMeeting::class);
     }
 }

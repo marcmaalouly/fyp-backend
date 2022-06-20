@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin Eloquent
  * @property string $unique_id
  * @method static Builder|Menus whereUniqueId($value)
+ * @property int|null $user_id
+ * @method static Builder|Menus whereUserId($value)
  */
 class Menus extends Model
 {

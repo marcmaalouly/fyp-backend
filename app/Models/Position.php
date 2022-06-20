@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property string $mail_service
  * @method static \Illuminate\Database\Eloquent\Builder|Position whereMailService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Position whereFolder($value)
  */
 class Position extends Model
 {

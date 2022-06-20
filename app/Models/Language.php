@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property string|null $mail_service
  * @method static \Illuminate\Database\Eloquent\Builder|Language whereMailService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Language whereFolder($value)
  */
 class Language extends Model
 {

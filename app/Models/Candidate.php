@@ -34,6 +34,17 @@ use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
  * @property string|null $mail_content_html
  * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereMailContentHtml($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereMailContentRaw($value)
+ * @property \Illuminate\Support\Carbon|null $date
+ * @property array|null $skills
+ * @property array|null $experience
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CandidateAttachment[] $attachments
+ * @property-read int|null $attachments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $favored_by_users
+ * @property-read int|null $favored_by_users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Candidate eloquentQuery($orderBy = 'id', $orderByDir = 'asc', $searchValue = '', $relationships = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereExperience($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Candidate whereSkills($value)
  */
 class Candidate extends Model
 {

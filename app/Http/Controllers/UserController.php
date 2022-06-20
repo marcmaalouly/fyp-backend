@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateMeetingRequest;
 use App\Http\Requests\ZoomConnectionRequest;
 use App\Models\Candidate;
 use App\Services\UserService;
@@ -37,5 +38,10 @@ class UserController extends Controller
     public function checkIfConnectedToZoom()
     {
         return $this->service->checkIfConnectedToZoom();
+    }
+
+    public function createMeeting(CreateMeetingRequest $request, Candidate $candidate)
+    {
+        return $this->service->createMeeting($request, $candidate);
     }
 }

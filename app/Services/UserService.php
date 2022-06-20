@@ -150,4 +150,36 @@ class UserService
     {
         return $this->success(["is_connected" => auth()->user()->zoom_information()->exists(), "Checked"]);
     }
+
+    public function createMeeting(Request $request, Candidate $candidate)
+    {
+        $validatedData = $this->validate($request);
+
+        $userZoomToken = auth()->user()->zoom_information ? auth()->user()->zoom_information->access_token : null;
+
+        if (!$userZoomToken) {
+            return $this->error(["No zoom token on this account"], 500);
+        }
+
+        $response = Http::withHeaders(['Authorization' => "Bearer " . $userZoomToken])
+            ->post('https://api.zoom.us/v2/users/me/meetings', [
+                "start_time" => $validatedData['start_time'],
+                "timezone" => "UTC"
+            ]);
+
+        if ($response->status() == 200 || $response->status() == 201) {
+            $data = collect(json_decode($response->body()))->toArray();
+
+            auth()->user()->candidate_meetings()->create([
+                'candidate_id' => $candidate->id,
+                'meeting_url' => $data['join_url'],
+                'start_meeting_url' => $data['start_url'],
+                'start_time' => $data['start_time']
+            ]);
+
+            return $this->success([], "Meeting Created");
+        } else {
+            return $this->error(["Error while creating zoom meeting"], 500);
+        }
+    }
 }
