@@ -183,8 +183,8 @@ class UserService
             $meeting_time = Carbon::parse($meeting['start_time'])
                 ->timezone($request->input('timezone') ?? 'Asia/Beirut');
 
-           $meeting['start'] = $meeting_time->format('Y-m-d');
-           $meeting['end'] = $meeting_time->addHour()->format('Y-m-d');
+           $meeting['start'] = $meeting_time->format('Y-m-d H:m:s');
+           $meeting['end'] = $meeting_time->addHour()->format('Y-m-d H:m:s');
            $meeting['allDay'] = false;
            $meeting['editable'] = false;
            return $meeting;
