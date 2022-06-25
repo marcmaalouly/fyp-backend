@@ -4,12 +4,15 @@ namespace App\Services;
 
 use App\Models\Candidate;
 use App\Models\CandidateMeeting;
+use App\Models\EmailTemplate;
 use App\Models\MeetingSchedule;
+use App\Notifications\SendZoomURLNotification;
 use App\Repositories\CandidateMeetingRepository;
 use App\Http\Traits\ServiceTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Notification;
 
 class CandidateMeetingService
 {
@@ -87,6 +90,18 @@ class CandidateMeetingService
                 'start_time' => $data['start_time'],
                 'meeting_schedule_id' => $validatedData['meeting_schedule_id']
             ]);
+
+            $template = null;
+            if (isset($validatedData['template_id'])) {
+                $template = EmailTemplate::find($validatedData['template_id']);
+            }
+
+            $custom_message = null;
+            if (isset($validatedData['custom_message'])) {
+                $custom_message = $validatedData['custom_message'];
+            }
+
+            Notification::route('mail', $candidate->email)->notify(new SendZoomURLNotification($data, $template, $custom_message));
 
             return $this->success([], "Meeting Created");
         } else {

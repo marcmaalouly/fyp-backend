@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MailConnectionController;
 use App\Http\Controllers\MenuController;
@@ -33,6 +34,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('zoom-meetings', [ZoomMeetingController::class, 'index']);
     Route::delete('zoom-meeting/{meeting_id}/delete', [ZoomMeetingController::class, 'destroy']);
     Route::get('zoom-meeting/{meeting}/view', [ZoomMeetingController::class, 'show']);
+
+    Route::get('email-templates', [EmailTemplateController::class, 'index']);
+    Route::post('email-template', [EmailTemplateController::class, 'store']);
 
     Route::get('skills', [SkillKeyController::class, 'index']);
 

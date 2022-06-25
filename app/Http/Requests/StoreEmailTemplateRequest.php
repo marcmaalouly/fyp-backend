@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateMeetingRequest extends FormRequest
+class StoreEmailTemplateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class CreateMeetingRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_time' => 'required|date',
-            'meeting_schedule_id' => 'required|exists:meeting_schedules,id',
-            'template_id' => 'nullable|exists:email_templates,id',
-            'custom_message' => 'nullable'
+            'title' => 'required',
+            'message' => 'required'
         ];
     }
 }

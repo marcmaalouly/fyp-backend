@@ -121,4 +121,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(CandidateMeeting::class);
     }
+
+    public function email_templates()
+    {
+        return $this->hasMany(EmailTemplate::class);
+    }
 }
