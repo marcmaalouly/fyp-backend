@@ -23,7 +23,8 @@ class CandidateMeeting extends Model
         'meeting_url',
         'meeting_id',
         'start_meeting_url',
-        'start_time'
+        'start_time',
+        'meeting_schedule_id'
     ];
 
     protected $dates = [
@@ -33,5 +34,10 @@ class CandidateMeeting extends Model
     public function candidate()
     {
         return $this->belongsTo(Candidate::class);
+    }
+
+    public function meeting_schedule()
+    {
+        return $this->belongsTo(MeetingSchedule::class);
     }
 }

@@ -36,11 +36,11 @@ class ZoomMeetingController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return void
      */
     public function create(Request $request)
     {
-        //
+        return $this->service->checkAvailability($request);
     }
 
     /**

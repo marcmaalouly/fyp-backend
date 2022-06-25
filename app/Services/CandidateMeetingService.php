@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Candidate;
 use App\Models\CandidateMeeting;
+use App\Models\MeetingSchedule;
 use App\Repositories\CandidateMeetingRepository;
 use App\Http\Traits\ServiceTrait;
 use Carbon\Carbon;
@@ -42,7 +43,21 @@ class CandidateMeetingService
 
     public function checkAvailability(Request $request)
     {
-        $data = $request->input('date') ?? now()->format('Y-m-d');
+        $date = $request->input('date') ?? now()->format('Y-m-d');
+
+        $meetingSchedules = MeetingSchedule::all();
+        $takenMeetings = auth()->user()->candidate_meetings()->whereDate('start_time', $date)->with('meeting_schedule')->get()->pluck('meeting_schedule.id');
+
+        $meetingSchedule = $meetingSchedules->map(function ($meetingSchedule) use ($takenMeetings) {
+            if ($takenMeetings->contains($meetingSchedule->id)) {
+                $meetingSchedule['available'] = false;
+                return $meetingSchedule;
+            }
+            $meetingSchedule['available'] = true;
+            return $meetingSchedule;
+        });
+
+        return $this->success($meetingSchedule, ['Fetched available time']);
     }
 
     public function create(Request $request, Candidate $candidate)
@@ -69,7 +84,8 @@ class CandidateMeetingService
                 'meeting_url' => $data['join_url'],
                 'start_meeting_url' => $data['start_url'],
                 'meeting_id' => $data['id'],
-                'start_time' => $data['start_time']
+                'start_time' => $data['start_time'],
+                'meeting_schedule_id' => $validatedData['meeting_schedule_id']
             ]);
 
             return $this->success([], "Meeting Created");

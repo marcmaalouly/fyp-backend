@@ -15,5 +15,4 @@ class CandidateMeetingRepository
     {
         $this->model = $model;
     }
-
 }

@@ -24,7 +24,8 @@ class CreateMeetingRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_time' => 'required|date'
+            'start_time' => 'required|date',
+            'meeting_schedule_id' => 'required|exists:meeting_schedules,id'
         ];
     }
 }

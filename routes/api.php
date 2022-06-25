@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('zoom-connect', [UserController::class, 'connectToZoom']);
     Route::get('zoom-check', [UserController::class, 'checkIfConnectedToZoom']);
     Route::post('zoom-meeting/{candidate}', [ZoomMeetingController::class, 'store']);
+    Route::get('zoom-meeting/{candidate}', [ZoomMeetingController::class, 'create']);
     Route::get('zoom-meetings', [ZoomMeetingController::class, 'index']);
     Route::delete('zoom-meeting/{meeting_id}/delete', [ZoomMeetingController::class, 'destroy']);
     Route::get('zoom-meeting/{meeting}/view', [ZoomMeetingController::class, 'show']);
