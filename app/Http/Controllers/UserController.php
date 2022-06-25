@@ -6,6 +6,7 @@ use App\Http\Requests\CreateMeetingRequest;
 use App\Http\Requests\DeleteMeetingRequest;
 use App\Http\Requests\ZoomConnectionRequest;
 use App\Models\Candidate;
+use App\Models\CandidateMeeting;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -51,8 +52,13 @@ class UserController extends Controller
         return $this->service->getMeetings($request);
     }
 
-    public function deleteMeeting(DeleteMeetingRequest $request)
+    public function deleteMeeting($meeting_id)
     {
-        return $this->service->deleteMeeting($request);
+        return $this->service->deleteMeeting($meeting_id);
+    }
+
+    public function viewMeeting(CandidateMeeting $meeting)
+    {
+        return $this->service->viewMeeting($meeting);
     }
 }

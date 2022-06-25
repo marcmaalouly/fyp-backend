@@ -29,4 +29,9 @@ class CandidateMeeting extends Model
     protected $dates = [
         'start_time'
     ];
+
+    public function candidate()
+    {
+        return $this->belongsTo(Candidate::class);
+    }
 }

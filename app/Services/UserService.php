@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Traits\ServiceTrait;
 use App\Models\Candidate;
+use App\Models\CandidateMeeting;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -194,15 +195,14 @@ class UserService
         return $this->success($meetings, "Meetings Fetched");
     }
 
-    public function deleteMeeting(Request $request)
+    public function deleteMeeting($meeting_id)
     {
-        $validatedData = $this->validate($request);
-        $query = auth()->user()->candidate_meetings()->where('meeting_id', $validatedData['meeting_id']);
+        $query = auth()->user()->candidate_meetings()->where('meeting_id', $meeting_id);
 
         if ($query->exists())
         {
             $query->delete();
-            $response = Http::delete('https://api.zoom.us/v2/meetings/' .  $validatedData['meeting_id']);
+            $response = Http::delete('https://api.zoom.us/v2/meetings/' .  $meeting_id);
 
             if ($response->status() == 204)
             {
@@ -213,5 +213,10 @@ class UserService
         }
 
         return $this->error(['No meeting found'], 404);
+    }
+
+    public function viewMeeting(CandidateMeeting $candidateMeeting)
+    {
+        return $this->success(CandidateMeeting::with('candidate')->find($candidateMeeting->id), ['Information Fetched']);
     }
 }
