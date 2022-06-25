@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class MeetingSchedule extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'from',
+        'to'
+    ];
 }

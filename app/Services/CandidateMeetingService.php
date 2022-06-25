@@ -40,6 +40,11 @@ class CandidateMeetingService
         return $this->success($meetings, "Meetings Fetched");
     }
 
+    public function checkAvailability(Request $request)
+    {
+        $data = $request->input('date') ?? now()->format('Y-m-d');
+    }
+
     public function create(Request $request, Candidate $candidate)
     {
         $validatedData = $this->validate($request);
@@ -79,11 +84,18 @@ class CandidateMeetingService
 
         if ($query->exists())
         {
-            $query->delete();
-            $response = Http::delete('https://api.zoom.us/v2/meetings/' .  $meeting_id);
+            $userZoomToken = auth()->user()->zoom_information ? auth()->user()->zoom_information->access_token : null;
+
+            if (!$userZoomToken) {
+                return $this->error(["No zoom token on this account"], 500);
+            }
+
+            $response = Http::withHeaders(['Authorization' => "Bearer " . $userZoomToken])
+                ->delete('https://api.zoom.us/v2/meetings/' .  $meeting_id);
 
             if ($response->status() == 204)
             {
+                $query->delete();
                 return $this->success([], 'Meeting Deleted Successfully');
             }
 

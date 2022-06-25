@@ -31,6 +31,12 @@ class CreateCandidateMeetingsTable extends Migration
             $table->bigInteger('meeting_id');
             $table->longText('start_meeting_url')->nullable();
             $table->dateTime('start_time');
+
+            $table->unsignedBigInteger('meeting_schedule_id')->nullable();
+            $table->foreign('meeting_schedule_id')
+                ->references('id')
+                ->on('meeting_schedules')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
