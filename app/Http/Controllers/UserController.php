@@ -41,24 +41,4 @@ class UserController extends Controller
     {
         return $this->service->checkIfConnectedToZoom();
     }
-
-    public function createMeeting(CreateMeetingRequest $request, Candidate $candidate)
-    {
-        return $this->service->createMeeting($request, $candidate);
-    }
-
-    public function getMeetings(Request $request)
-    {
-        return $this->service->getMeetings($request);
-    }
-
-    public function deleteMeeting($meeting_id)
-    {
-        return $this->service->deleteMeeting($meeting_id);
-    }
-
-    public function viewMeeting(CandidateMeeting $meeting)
-    {
-        return $this->service->viewMeeting($meeting);
-    }
 }
