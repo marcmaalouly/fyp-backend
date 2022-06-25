@@ -63,7 +63,7 @@ class CandidateMeetingService
                 'candidate_id' => $candidate->id,
                 'meeting_url' => $data['join_url'],
                 'start_meeting_url' => $data['start_url'],
-                'meeting_id' => $data['meeting_id'],
+                'meeting_id' => $data['id'],
                 'start_time' => $data['start_time']
             ]);
 
