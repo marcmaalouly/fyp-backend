@@ -28,6 +28,7 @@ class CreateCandidateMeetingsTable extends Migration
                 ->onDelete('cascade');
 
             $table->longText('meeting_url');
+            $table->integer('meeting_id');
             $table->longText('start_meeting_url')->nullable();
             $table->dateTime('start_time');
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateMeetingRequest;
+use App\Http\Requests\DeleteMeetingRequest;
 use App\Http\Requests\ZoomConnectionRequest;
 use App\Models\Candidate;
 use App\Services\UserService;
@@ -48,5 +49,10 @@ class UserController extends Controller
     public function getMeetings(Request $request)
     {
         return $this->service->getMeetings($request);
+    }
+
+    public function deleteMeeting(DeleteMeetingRequest $request)
+    {
+        return $this->service->deleteMeeting($request);
     }
 }

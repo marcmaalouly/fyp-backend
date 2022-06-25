@@ -21,6 +21,7 @@ class CandidateMeeting extends Model
         'candidate_id',
         'user_id',
         'meeting_url',
+        'meeting_id',
         'start_meeting_url',
         'start_time'
     ];
