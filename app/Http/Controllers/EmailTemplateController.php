@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEmailTemplateRequest;
+use App\Http\Requests\UpdateEmailTemplateRequest;
+use App\Models\EmailTemplate;
 use App\Services\EmailTemplateService;
 use Illuminate\Http\Request;
 
@@ -41,7 +43,7 @@ class EmailTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreEmailTemplateRequest $request)
@@ -74,13 +76,13 @@ class EmailTemplateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateEmailTemplateRequest $request
+     * @param EmailTemplate $template
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEmailTemplateRequest $request, EmailTemplate $template)
     {
-        //
+        return $this->service->update($request, $template);
     }
 
     /**
@@ -89,8 +91,8 @@ class EmailTemplateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(EmailTemplate $template)
     {
-        //
+        $template->delete();
     }
 }

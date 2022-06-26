@@ -37,6 +37,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('email-templates', [EmailTemplateController::class, 'index']);
     Route::post('email-template', [EmailTemplateController::class, 'store']);
+    Route::delete('email-template/{template}', [EmailTemplateController::class, 'destroy']);
+    Route::put('email-template/{template}', [EmailTemplateController::class, 'update']);
 
     Route::get('skills', [SkillKeyController::class, 'index']);
 

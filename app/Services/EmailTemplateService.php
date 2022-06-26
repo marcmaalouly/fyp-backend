@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\EmailTemplate;
 use App\Repositories\EmailTemplateRepository;
 use App\Http\Traits\ServiceTrait;
 use Illuminate\Http\Request;
@@ -31,5 +32,14 @@ class EmailTemplateService
         auth()->user()->email_templates()->create($validatedData);
 
         return $this->success([], 'Template Created');
+    }
+
+    public function update(Request $request, EmailTemplate $template)
+    {
+        $validatedData = $this->validate($request);
+
+        $template->update($validatedData);
+
+        return $this->success([], 'Template Updated');
     }
 }
