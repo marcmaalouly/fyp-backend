@@ -2,27 +2,49 @@
 
 namespace App\Helpers;
 
+use App\Exports\SkillExport;
 use App\Models\Candidate;
-use App\Models\SkillKey;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CvParser
 {
     public static function parse($files, Candidate $candidate)
     {
+        $skillFile = self::getSkillCsvFile($candidate);
+
         foreach ($files as $file) {
             $fileContent = File::get(public_path('storage/attachments/' . $file));
-            self::sendToPython($fileContent, $candidate);
+            self::sendToPython($fileContent, $skillFile, $candidate);
         }
     }
 
-    private static function sendToPython($file, Candidate $candidate)
+    private static function getSkillCsvFile(Candidate $candidate)
+    {
+        $public_path = public_path('storage/skillExports/');
+
+        if (!File::exists($public_path)) {
+            File::makeDirectory($public_path, 0755, true);
+        }
+
+        $exportClass = new SkillExport($candidate->language);
+        $csvName = $candidate->language->id . '-skillExport.csv';
+        Excel::store($exportClass, $csvName, 'skill_exports');
+
+        return File::get(public_path('storage/skillExports/' . $csvName));
+    }
+
+    private static function sendToPython($file, $skillFile, Candidate $candidate)
     {
         $response = Http::attach(
-            'file',
+            'file[0]',
             $file,
             'CvToParse.pdf'
+        )->attach(
+            'file[1]',
+            $skillFile,
+            'skillFile.csv'
         )->post(env('PYTHON_URL'), [
             'file' => $file,
         ]);
@@ -61,6 +83,5 @@ class CvParser
             'experience' => $data['experience'],
             'full_name' => $data['name']
         ]);
-
     }
 }

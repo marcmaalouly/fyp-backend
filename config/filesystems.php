@@ -49,6 +49,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'skill_exports' => [
+            'driver' => 'local',
+            'root' => public_path('storage/skillExports'),
+            'url' => env('APP_URL').'storage/skillExports',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
