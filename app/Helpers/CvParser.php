@@ -66,7 +66,7 @@ class CvParser
         foreach ($data['skills'] as $skill) {
             $key = strtolower($skill);
 
-            if ($candidate->language->skill_keys()->where('key', 'like', $key)->exists()) {
+            if ($candidate->language->skill_keys()->where('key', 'like', '%'.$key.'%')->exists()) {
                 $languageHasSkill = true;
                 break;
             }
