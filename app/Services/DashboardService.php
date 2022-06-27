@@ -37,6 +37,13 @@ class DashboardService
         });
 
         $mostExperiencedCandidates = collect($allCandidates)->sortByDesc('year_of_experience')->take(5);
+        $mostSkilledCandidates = collect($allCandidates)->sortByDesc('skills')->take(5);
+
+        $mostSkilledCandidateNames = $mostSkilledCandidates->pluck('email');
+        $mostSkilledCandidateValues = $mostSkilledCandidates->pluck('skills')->map(function ($query) {
+            return count($query);
+        });
+
         $mostExperiencedCandidateNames = $mostExperiencedCandidates->pluck('email');
         $mostExperiencedCandidateValues = $mostExperiencedCandidates->pluck('year_of_experience');
 
@@ -49,7 +56,8 @@ class DashboardService
             'total_meetings' => $totalMeetings,
             'total_candidate_in_opening' => [$nameOfOpenings, $totalCandidateInOpenings],
             'total_candidate_in_language' => [$nameOfLanguage, $totalCandidateInLanguages],
-            'top_experienced' => [$mostExperiencedCandidateNames, $mostExperiencedCandidateValues]
+            'top_experienced' => [$mostExperiencedCandidateNames, $mostExperiencedCandidateValues],
+            'top_skilled' => [$mostSkilledCandidateNames, $mostSkilledCandidateValues]
         ];
 
         return $this->success($data, 'Dashboard Fetched');
