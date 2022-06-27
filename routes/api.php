@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MailConnectionController;
@@ -21,6 +22,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('me', [AuthController::class, 'me']);
+
+    Route::get('dashboards', [DashboardController::class, 'index']);
 
     Route::get('menu', [MenuController::class, 'index']);
 
