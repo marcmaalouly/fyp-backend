@@ -49,6 +49,7 @@ class SendZoomURLNotification extends Notification
         $message = $this->checkForTemplate();
 
         return (new MailMessage)
+                    ->subject('Zoom Meeting')
                     ->line($message)
                     ->action('Zoom Meeting', $this->data['join_url']);
     }
