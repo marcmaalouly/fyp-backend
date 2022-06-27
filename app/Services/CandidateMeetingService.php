@@ -29,7 +29,7 @@ class CandidateMeetingService
 
     public function get(Request $request)
     {
-        $meetings = auth()->user()->candidate_meetings()->get();
+        $meetings = auth()->user()->candidate_meetings()->with('candidate')->get();
         $meetings = $meetings->map(function ($meeting) use ($request) {
             $meeting_time = Carbon::parse($meeting['start_time'])
                 ->timezone($request->input('timezone') ?? 'Asia/Beirut');
