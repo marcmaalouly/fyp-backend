@@ -121,6 +121,7 @@ class MenusTableSeeder extends Seeder
         $this->insertLink('', 'Languages', '/languages', 'languages', 'cil-command');
         $this->insertLink('', 'Calendar', '/calendar', 'calendar', 'cil-calendar');
         $this->insertLink('', 'Favorites', '/favorites', 'calendar', 'cil-star');
+        $this->insertLink('', 'Email Templates', '/emailTemplates', 'email_templates', 'cil-file');
         DB::table('menulist')->insert([
             'name' => 'top_menu'
         ]);
