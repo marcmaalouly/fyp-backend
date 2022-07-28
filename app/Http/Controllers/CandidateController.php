@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use App\Models\Language;
 use App\Models\Position;
 use App\Services\CandidateService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class CandidateController extends Controller
 {
@@ -22,7 +25,7 @@ class CandidateController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource
+     * @return DataTableCollectionResource
      */
     public function index(Request $request, Position $position, Language $language)
     {
@@ -87,11 +90,11 @@ class CandidateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Candidate $candidate
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Candidate $candidate)
     {
-        //
+        return $this->service->delete($candidate);
     }
 }

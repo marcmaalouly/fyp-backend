@@ -66,6 +66,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
                     Route::delete('', [LanguageController::class, 'destroy']);
 
                     Route::get('candidates', [CandidateController::class, 'index']);
+                    Route::delete('candidate/{candidate}', [CandidateController::class, 'destroy']);
                 });
             });
         });

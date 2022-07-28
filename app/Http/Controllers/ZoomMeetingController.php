@@ -36,7 +36,7 @@ class ZoomMeetingController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return void
+     * @return JsonResponse
      */
     public function create(Request $request)
     {

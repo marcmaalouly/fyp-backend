@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Helpers\AttachmentHelper;
 use App\Helpers\CvParser;
 use App\Models\Candidate;
-use App\Models\CandidateAttachment;
 use App\Models\User;
 use App\Notifications\EmailFetchedNotification;
 use Exception;
@@ -14,9 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Webklex\PHPIMAP\Attachment;
 use Webklex\PHPIMAP\Client;
 use Webklex\PHPIMAP\ClientManager;
@@ -164,16 +162,7 @@ class FetchSMTPEmails implements ShouldQueue
      */
     private function saveAttachmentInDB(Candidate $candidate)
     {
-        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->language_id
-            . '/' . $candidate->email);
-
-        foreach ($files as $file) {
-            CandidateAttachment::create([
-                'candidate_id' => $candidate->id,
-                'path' => 'storage/attachments/' . $file,
-                'name' => explode($candidate->email . "/", $file)[1]
-            ]);
-        }
+        $files = AttachmentHelper::saveInDB($candidate);
 
         CvParser::parse($files, $candidate);
     }

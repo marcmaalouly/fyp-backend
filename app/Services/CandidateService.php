@@ -45,4 +45,10 @@ class CandidateService
 
         return new DataTableCollectionResource($candidates);
     }
+
+    public function delete(Candidate $candidate)
+    {
+        $candidate->delete();
+        return $this->success([], 'Candidate Deleted');
+    }
 }

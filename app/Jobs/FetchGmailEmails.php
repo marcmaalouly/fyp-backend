@@ -2,16 +2,15 @@
 
 namespace App\Jobs;
 
+use App\Helpers\AttachmentHelper;
 use App\Helpers\CvParser;
 use App\Models\Candidate;
-use App\Models\CandidateAttachment;
 use App\Models\User;
 use App\Notifications\EmailFetchedNotification;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use Dacastro4\LaravelGmail\Services\Message;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,7 +19,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class FetchGmailEmails implements ShouldQueue
 {
@@ -167,16 +165,7 @@ class FetchGmailEmails implements ShouldQueue
      */
     private function saveAttachmentInDB(Candidate $candidate)
     {
-        $files = Storage::disk('attachments')->allFiles($candidate->language->position->user_id . '/' . $candidate->language_id
-            . '/' . $candidate->email);
-
-        foreach ($files as $file) {
-            CandidateAttachment::create([
-                'candidate_id' => $candidate->id,
-                'path' => 'storage/attachments/' . $file,
-                'name' => explode($candidate->email . "/", $file)[1]
-            ]);
-        }
+        $files = AttachmentHelper::saveInDB($candidate);
 
         CvParser::parse($files, $candidate);
     }

@@ -19982,6 +19982,7 @@ namespace  {
             class Client extends \Webklex\IMAP\Facades\Client {}
             class FileHelper extends \App\Helpers\FileHelper {}
             class CvParser extends \App\Helpers\CvParser {}
+            class AttachmentHelper extends \App\Helpers\AttachmentHelper {}
 }
 
 

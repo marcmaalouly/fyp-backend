@@ -14,22 +14,28 @@ class DashboardService
         $positionsAndLanguages = auth()->user()->positions()->with(['languages' => function ($query) {
             return $query->with('candidates');
         }])->get();
+
         $totalCandidates = 0;
         $nameOfOpenings = [];
         $totalCandidateInOpenings = [];
         $nameOfLanguage = [];
         $totalCandidateInLanguages = [];
         $allCandidates = [];
+
         $positionsAndLanguages->map(function ($positionAndLanguage) use (&$totalCandidates, &$totalCandidateInOpenings,
             &$nameOfOpenings, &$nameOfLanguage, &$totalCandidateInLanguages, &$allCandidates) {
+
             $nameOfOpenings[] = $positionAndLanguage->name;
+
             $positionAndLanguage->languages->map(function ($language) use (&$totalCandidates, &$totalCandidateInOpenings,
                 &$nameOfLanguage, &$totalCandidateInLanguages, &$allCandidates, $positionAndLanguage) {
+
                 $count = $language->candidates()->count();
                 $totalCandidates = $totalCandidates + $count;
                 $totalCandidateInOpenings[] = $count;
                 $nameOfLanguage[] = $language->name;
                 $totalCandidateInLanguages[] = $count;
+
                 $language->candidates()->get(['year_of_experience', 'skills', 'email'])->map(function ($candidates) use (&$allCandidates) {
                     $allCandidates[] = $candidates;
                 });
